@@ -1,0 +1,5 @@
+/* The docs app consumes the design system exactly as a real app would. */
+@import '../../../packages/ui/src/styles/index.css';
+
+/* Scan this app's own templates too. */
+@source "./";

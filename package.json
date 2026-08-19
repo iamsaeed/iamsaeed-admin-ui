@@ -1,0 +1,17 @@
+{
+  "name": "@askasia/admin-panel",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Reusable, runtime-skinnable Vue 3 admin theme — monorepo root",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@askasia/admin-docs",
+    "build": "npm run build --workspace=@askasia/admin-ui && npm run build --workspace=@askasia/admin-docs",
+    "build:ui": "npm run build --workspace=@askasia/admin-ui",
+    "type-check": "npm run type-check --workspaces --if-present"
+  }
+}

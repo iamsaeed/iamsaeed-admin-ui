@@ -1,0 +1,392 @@
+/* ============================================================================
+   @askasia/admin-ui — TOKENS
+   ----------------------------------------------------------------------------
+   Layer 1 (primitives) and Layer 2 (semantic roles). Components consume ONLY
+   Layer 2 (`--lm-*`). Nothing in this file is a Tailwind concern — the bridge
+   to Tailwind lives in `theme.css` via `@theme inline`.
+
+   Four independent axes live on <html>:
+     data-theme    light | dark | sepia      surface + text lightness
+     data-skin     violet | blue | ...       accent hue only
+     data-density  compact | regular | comfy control sizing + rhythm
+     data-radius   sharp | regular | round   corner scale
+
+   They compose. Changing one never disturbs another.
+============================================================================ */
+
+:root {
+  /* --------------------------------------------------------------------
+     LAYER 1 — PRIMITIVES
+     Raw inputs. Never referenced by a component; only by Layer 2 below.
+     -------------------------------------------------------------------- */
+
+  /* Accent hue and chroma — the two scalars a skin sets.
+     Set by [data-skin]; override inline for an arbitrary brand colour:
+        <html style="--lm-accent-h: 12; --lm-skin-c: 0.18">
+
+     WHY CHROMA IS PER-SKIN AND NOT A CONSTANT:
+     sRGB's gamut is strongly hue-dependent. At L=0.52, violet reaches
+     chroma 0.29 while teal tops out at 0.083 — so a single shared chroma
+     either desaturates violet to teal's ceiling or silently clips teal.
+     The original theme used 0.18 for everything, which meant teal, green,
+     blue and amber were all being clipped and were NOT the colours the
+     tokens claimed. `--lm-skin-c` is each skin's real ceiling, so every
+     skin is as vivid as sRGB actually allows and none of them clip.
+     `tests/contrast.test.ts` asserts this for all 24 theme × skin pairs. */
+  --lm-accent-h: 290;
+  --lm-skin-c: 0.216;
+
+  /* Neutral hue — tints greys toward the accent for a cohesive feel.     */
+  --lm-neutral-h: 270;
+  --lm-neutral-c: 0.005;
+
+  /* Fixed status hues. Deliberately NOT skinned: danger must read as
+     danger in every brand, or the UI lies to the user.                   */
+  --lm-h-success: 155;
+  --lm-h-warn: 75;
+  --lm-h-danger: 25;
+  --lm-h-info: 230;
+
+  /* --------------------------------------------------------------------
+     LAYER 2 — SEMANTIC ROLES  (light is the base; themes override below)
+     -------------------------------------------------------------------- */
+
+  /* Surfaces, back to front */
+  --lm-bg: oklch(0.99 0.003 var(--lm-neutral-h));
+  --lm-surface: oklch(1 0 0);
+  --lm-surface-2: oklch(0.985 0.004 var(--lm-neutral-h));
+  --lm-sunken: oklch(0.97 var(--lm-neutral-c) var(--lm-neutral-h));
+
+  /* Hairlines */
+  --lm-border: oklch(0.92 var(--lm-neutral-c) var(--lm-neutral-h));
+  --lm-border-strong: oklch(0.86 0.008 var(--lm-neutral-h));
+
+  /* Foreground, by prominence */
+  --lm-fg: oklch(0.22 0.01 var(--lm-neutral-h));
+  --lm-muted: oklch(0.5 0.012 var(--lm-neutral-h));
+  --lm-subtle: oklch(0.65 0.01 var(--lm-neutral-h));
+
+  /* Accent — lightness/chroma INPUTS only. The ramp is composed further
+     down, in the `:root, [data-skin]` rule.
+
+     Solid and hover scale with the skin's chroma; the near-white roles use
+     small ABSOLUTE chromas, because tying them to the skin forced every
+     skin down to the tightest hue's ceiling at L=0.95.
+
+     Every lightness here was solved, not chosen by eye: L=0.52 is the
+     lightest solid on which near-white label text still clears WCAG AA
+     (4.5:1) for all eight hues. The previous 0.62 gave 2.97:1 — primary
+     button labels genuinely failed. */
+  --lm-accent-l: 0.52;       --lm-accent-c: calc(var(--lm-skin-c) * 1);
+  --lm-accent-hover-l: 0.45; --lm-accent-hover-c: calc(var(--lm-skin-c) * 0.92);
+  --lm-accent-soft-l: 0.95;  --lm-accent-soft-c: 0.021;
+  --lm-accent-soft-2-l: 0.9; --lm-accent-soft-2-c: 0.043;
+  --lm-on-accent-l: 0.99;    --lm-on-accent-c: 0.004;
+  --lm-ring-a: 0.45;
+
+  /* Status.
+     These are TEXT colours as much as fills — `.badge-success`,
+     `.alert-warn` etc. print them on the matching `-soft` background — so
+     each pair is solved for 4.5:1 against both its own soft background and
+     the page surface. The previous values were badly short: warn on
+     warn-soft was 1.78:1, success 2.21:1, info 2.25:1. */
+  --lm-success: oklch(0.52 0.116 var(--lm-h-success));
+  --lm-success-soft: oklch(0.95 0.043 var(--lm-h-success));
+  --lm-warn: oklch(0.535 0.102 var(--lm-h-warn));
+  --lm-warn-soft: oklch(0.95 0.022 var(--lm-h-warn));
+  --lm-danger: oklch(0.555 0.203 var(--lm-h-danger));
+  --lm-danger-soft: oklch(0.95 0.014 var(--lm-h-danger));
+  --lm-info: oklch(0.525 0.094 var(--lm-h-info));
+  --lm-info-soft: oklch(0.95 0.016 var(--lm-h-info));
+
+  /* Chart series — c1 follows the skin (composed below), the rest hold
+     their own hues so a multi-series chart stays distinguishable under
+     every skin.                                                          */
+  --lm-c2: oklch(0.72 0.14 200);
+  --lm-c3: oklch(0.78 0.14 75);
+  --lm-c4: oklch(0.7 0.14 155);
+  --lm-c5: oklch(0.65 0.18 350);
+
+  /* Overlay scrim behind modals/drawers */
+  --lm-scrim: oklch(0.2 0.01 var(--lm-neutral-h) / 0.4);
+
+  /* Elevation */
+  --lm-shadow-xs: 0 1px 2px oklch(0.2 0.01 var(--lm-neutral-h) / 0.04);
+  --lm-shadow-sm: 0 2px 6px oklch(0.2 0.01 var(--lm-neutral-h) / 0.05),
+                  0 1px 2px oklch(0.2 0.01 var(--lm-neutral-h) / 0.04);
+  --lm-shadow: 0 6px 20px oklch(0.2 0.01 var(--lm-neutral-h) / 0.06),
+               0 2px 6px oklch(0.2 0.01 var(--lm-neutral-h) / 0.04);
+  --lm-shadow-lg: 0 20px 60px oklch(0.2 0.01 var(--lm-neutral-h) / 0.1),
+                  0 8px 16px oklch(0.2 0.01 var(--lm-neutral-h) / 0.05);
+
+  /* Type */
+  --lm-font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --lm-font-display: 'Inter Tight', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --lm-font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Motion. Respected globally; `prefers-reduced-motion` zeroes it in base.css */
+  --lm-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --lm-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --lm-dur-fast: 120ms;
+  --lm-dur: 200ms;
+  --lm-dur-slow: 320ms;
+
+  /* Stacking. Named so a consumer never has to guess a z-index.
+     Order matters: the scrim sits BELOW the surfaces it backs. One shared
+     scrim serves the drawer and the modal, so it has to be under both —
+     putting it above the drawer dims the drawer itself. */
+  --lm-z-sticky: 20;
+  --lm-z-scrim: 35;
+  --lm-z-drawer: 40;
+  --lm-z-modal: 50;
+  --lm-z-toast: 60;
+
+  color-scheme: light;
+}
+
+/* ============================================================================
+   ACCENT COMPOSITION — the one place the ramp is actually built.
+
+   WHY THIS IS A SEPARATE RULE, and not just written inline in :root:
+
+   A custom property's `var()` references are substituted at computed-value
+   time ON THE ELEMENT WHERE THE PROPERTY IS DECLARED. If `--lm-accent` were
+   declared only on :root, its `var(--lm-accent-h)` would resolve there — and
+   descendants would inherit the finished colour. Setting `--lm-accent-h` on a
+   child would then do nothing at all.
+
+   That is fine for the normal case (all four axes live on <html>, so they
+   resolve together), but it silently breaks nested scoping — a per-tenant
+   preview card, a "your brand" section, the skin swatches in the style guide.
+
+   Matching `[data-skin]` as well re-declares the ramp ON that element, where
+   its own `--lm-accent-h` is in scope. The lightness/chroma inputs are still
+   inherited from whichever theme is active above it, so a nested skin inside
+   a dark theme stays correctly dark. Hue and theme compose at any depth:
+
+       <html data-theme="dark" data-skin="violet">
+         <div data-skin="teal">  <!-- dark teal, correctly -->
+============================================================================ */
+
+:root,
+[data-skin] {
+  --lm-accent: oklch(var(--lm-accent-l) var(--lm-accent-c) var(--lm-accent-h));
+  --lm-accent-hover: oklch(var(--lm-accent-hover-l) var(--lm-accent-hover-c) var(--lm-accent-h));
+  --lm-accent-soft: oklch(var(--lm-accent-soft-l) var(--lm-accent-soft-c) var(--lm-accent-h));
+  --lm-accent-soft-2: oklch(var(--lm-accent-soft-2-l) var(--lm-accent-soft-2-c) var(--lm-accent-h));
+  --lm-on-accent: oklch(var(--lm-on-accent-l) var(--lm-on-accent-c) var(--lm-accent-h));
+  --lm-ring: oklch(var(--lm-accent-l) var(--lm-accent-c) var(--lm-accent-h) / var(--lm-ring-a));
+  --lm-c1: oklch(var(--lm-accent-l) var(--lm-accent-c) var(--lm-accent-h));
+}
+
+/* ============================================================================
+   AXIS: data-theme — surfaces, text, and the accent's L/C inputs.
+   Never the hue: that belongs to the skin, and the two must stay orthogonal.
+============================================================================ */
+
+[data-theme='dark'] {
+  --lm-bg: oklch(0.16 0.012 var(--lm-neutral-h));
+  --lm-surface: oklch(0.2 0.013 var(--lm-neutral-h));
+  --lm-surface-2: oklch(0.22 0.014 var(--lm-neutral-h));
+  --lm-sunken: oklch(0.18 0.012 var(--lm-neutral-h));
+
+  --lm-border: oklch(0.28 0.014 var(--lm-neutral-h));
+  --lm-border-strong: oklch(0.36 0.016 var(--lm-neutral-h));
+
+  --lm-fg: oklch(0.97 0.005 var(--lm-neutral-h));
+  --lm-muted: oklch(0.72 0.012 var(--lm-neutral-h));
+  --lm-subtle: oklch(0.55 0.014 var(--lm-neutral-h));
+
+  /* Accent lifts in lightness on dark ground — same hue, correct contrast.
+     Only the L/C inputs move; the ramp itself is composed above, so this
+     stays true for a nested skin too.                                    */
+  --lm-accent-l: 0.72;       --lm-accent-c: calc(var(--lm-skin-c) * 0.62);
+  --lm-accent-hover-l: 0.78; --lm-accent-hover-c: calc(var(--lm-skin-c) * 0.52);
+  --lm-accent-soft-l: 0.3;   --lm-accent-soft-c: 0.048;
+  --lm-accent-soft-2-l: 0.36; --lm-accent-soft-2-c: 0.056;
+  --lm-on-accent-l: 0.15;    --lm-on-accent-c: 0.01;
+  --lm-ring-a: 0.5;
+
+  --lm-success: oklch(0.675 0.15 var(--lm-h-success));
+  --lm-success-soft: oklch(0.32 0.045 var(--lm-h-success));
+  --lm-warn: oklch(0.69 0.131 var(--lm-h-warn));
+  --lm-warn-soft: oklch(0.32 0.038 var(--lm-h-warn));
+  --lm-danger: oklch(0.7 0.172 var(--lm-h-danger));
+  --lm-danger-soft: oklch(0.32 0.073 var(--lm-h-danger));
+  --lm-info: oklch(0.685 0.122 var(--lm-h-info));
+  --lm-info-soft: oklch(0.32 0.036 var(--lm-h-info));
+
+  --lm-scrim: oklch(0 0 0 / 0.6);
+
+  --lm-shadow-xs: 0 1px 2px oklch(0 0 0 / 0.4);
+  --lm-shadow-sm: 0 2px 6px oklch(0 0 0 / 0.35), 0 1px 2px oklch(0 0 0 / 0.3);
+  --lm-shadow: 0 8px 24px oklch(0 0 0 / 0.4), 0 2px 6px oklch(0 0 0 / 0.3);
+  --lm-shadow-lg: 0 24px 60px oklch(0 0 0 / 0.5), 0 8px 16px oklch(0 0 0 / 0.35);
+
+  color-scheme: dark;
+}
+
+/* Warm, paper-like. Proves the system handles a theme that shifts the
+   NEUTRAL hue too, not just its lightness. */
+[data-theme='sepia'] {
+  --lm-neutral-h: 70;
+  --lm-neutral-c: 0.03;
+
+  --lm-bg: oklch(0.945 0.025 75);
+  --lm-surface: oklch(0.965 0.022 75);
+  --lm-surface-2: oklch(0.945 0.026 75);
+  --lm-sunken: oklch(0.915 0.03 75);
+
+  --lm-border: oklch(0.86 0.03 70);
+  --lm-border-strong: oklch(0.76 0.04 65);
+
+  --lm-fg: oklch(0.26 0.04 50);
+  --lm-muted: oklch(0.5 0.045 55);
+  --lm-subtle: oklch(0.62 0.04 60);
+
+  /* Sepia deepens the accent instead of lifting it — a paper ground needs
+     more contrast from ink, not less. */
+  --lm-accent-l: 0.48;        --lm-accent-c: calc(var(--lm-skin-c) * 0.95);
+  --lm-accent-hover-l: 0.42;  --lm-accent-hover-c: calc(var(--lm-skin-c) * 0.88);
+  --lm-accent-soft-l: 0.9;    --lm-accent-soft-c: 0.043;
+  --lm-accent-soft-2-l: 0.85; --lm-accent-soft-2-c: 0.066;
+  --lm-on-accent-l: 0.98;     --lm-on-accent-c: 0.008;
+
+  /* Sepia needs its own status values: its page is a warm 0.92-ish paper,
+     so the light theme's soft backgrounds do not sit correctly on it. */
+  --lm-success: oklch(0.505 0.112 var(--lm-h-success));
+  --lm-success-soft: oklch(0.92 0.073 var(--lm-h-success));
+  --lm-warn: oklch(0.515 0.098 var(--lm-h-warn));
+  --lm-warn-soft: oklch(0.92 0.036 var(--lm-h-warn));
+  --lm-danger: oklch(0.53 0.194 var(--lm-h-danger));
+  --lm-danger-soft: oklch(0.92 0.022 var(--lm-h-danger));
+  --lm-info: oklch(0.505 0.091 var(--lm-h-info));
+  --lm-info-soft: oklch(0.92 0.026 var(--lm-h-info));
+
+  --lm-scrim: oklch(0.3 0.05 60 / 0.4);
+
+  color-scheme: light;
+}
+
+/* System preference, only when the app has not made an explicit choice. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --lm-bg: oklch(0.16 0.012 var(--lm-neutral-h));
+    --lm-surface: oklch(0.2 0.013 var(--lm-neutral-h));
+    --lm-surface-2: oklch(0.22 0.014 var(--lm-neutral-h));
+    --lm-sunken: oklch(0.18 0.012 var(--lm-neutral-h));
+    --lm-border: oklch(0.28 0.014 var(--lm-neutral-h));
+    --lm-border-strong: oklch(0.36 0.016 var(--lm-neutral-h));
+    --lm-fg: oklch(0.97 0.005 var(--lm-neutral-h));
+    --lm-muted: oklch(0.72 0.012 var(--lm-neutral-h));
+    --lm-subtle: oklch(0.55 0.014 var(--lm-neutral-h));
+    --lm-accent-l: 0.72;        --lm-accent-c: calc(var(--lm-skin-c) * 0.62);
+    --lm-accent-hover-l: 0.78;  --lm-accent-hover-c: calc(var(--lm-skin-c) * 0.52);
+    --lm-accent-soft-l: 0.3;    --lm-accent-soft-c: 0.048;
+    --lm-accent-soft-2-l: 0.36; --lm-accent-soft-2-c: 0.056;
+    --lm-on-accent-l: 0.15;     --lm-on-accent-c: 0.01;
+    --lm-ring-a: 0.5;
+    --lm-success: oklch(0.675 0.15 var(--lm-h-success));
+    --lm-success-soft: oklch(0.32 0.045 var(--lm-h-success));
+    --lm-warn: oklch(0.69 0.131 var(--lm-h-warn));
+    --lm-warn-soft: oklch(0.32 0.038 var(--lm-h-warn));
+    --lm-danger: oklch(0.7 0.172 var(--lm-h-danger));
+    --lm-danger-soft: oklch(0.32 0.073 var(--lm-h-danger));
+    --lm-info: oklch(0.685 0.122 var(--lm-h-info));
+    --lm-info-soft: oklch(0.32 0.036 var(--lm-h-info));
+    --lm-scrim: oklch(0 0 0 / 0.6);
+    --lm-shadow-xs: 0 1px 2px oklch(0 0 0 / 0.4);
+    --lm-shadow-sm: 0 2px 6px oklch(0 0 0 / 0.35), 0 1px 2px oklch(0 0 0 / 0.3);
+    --lm-shadow: 0 8px 24px oklch(0 0 0 / 0.4), 0 2px 6px oklch(0 0 0 / 0.3);
+    --lm-shadow-lg: 0 24px 60px oklch(0 0 0 / 0.5), 0 8px 16px oklch(0 0 0 / 0.35);
+    color-scheme: dark;
+  }
+}
+
+/* ============================================================================
+   AXIS: data-density — rhythm and control sizing.
+
+   `regular` is the default and lives in :root so density is optional.
+   Note every control height stays >= 44px on coarse pointers (see base.css) —
+   density tightens desktop, never at the cost of a touch target.
+============================================================================ */
+
+:root {
+  --lm-space-1: 0.25rem;
+  --lm-space-2: 0.5rem;
+  --lm-space-3: 0.75rem;
+  --lm-space-4: 1rem;
+  --lm-space-5: 1.5rem;
+  --lm-space-6: 2rem;
+
+  --lm-control-h-sm: 2rem;     /* 32px */
+  --lm-control-h: 2.5rem;      /* 40px */
+  --lm-control-h-lg: 3rem;     /* 48px */
+  --lm-control-px: 0.875rem;
+
+  --lm-card-p: 1.25rem;
+  --lm-row-h: 3.25rem;
+  --lm-text-base: 0.875rem;
+
+  --lm-sidebar-w: 264px;
+  --lm-sidebar-w-icon: 76px;
+  --lm-topbar-h: 60px;
+  --lm-bottomnav-h: 56px;
+}
+
+[data-density='compact'] {
+  --lm-space-5: 1.125rem;
+  --lm-space-6: 1.5rem;
+  --lm-control-h-sm: 1.75rem;
+  --lm-control-h: 2.125rem;
+  --lm-control-h-lg: 2.5rem;
+  --lm-control-px: 0.75rem;
+  --lm-card-p: 0.875rem;
+  --lm-row-h: 2.5rem;
+  --lm-text-base: 0.8125rem;
+  --lm-sidebar-w: 232px;
+  --lm-topbar-h: 52px;
+}
+
+[data-density='comfy'] {
+  --lm-space-5: 1.75rem;
+  --lm-space-6: 2.5rem;
+  --lm-control-h-sm: 2.25rem;
+  --lm-control-h: 2.875rem;
+  --lm-control-h-lg: 3.375rem;
+  --lm-control-px: 1.125rem;
+  --lm-card-p: 1.75rem;
+  --lm-row-h: 4rem;
+  --lm-text-base: 0.9375rem;
+  --lm-sidebar-w: 296px;
+  --lm-topbar-h: 68px;
+}
+
+/* ============================================================================
+   AXIS: data-radius — corner scale
+============================================================================ */
+
+:root {
+  --lm-radius-xs: 6px;
+  --lm-radius-sm: 10px;
+  --lm-radius: 14px;
+  --lm-radius-lg: 20px;
+  --lm-radius-xl: 28px;
+  --lm-radius-pill: 999px;
+}
+
+[data-radius='sharp'] {
+  --lm-radius-xs: 2px;
+  --lm-radius-sm: 3px;
+  --lm-radius: 4px;
+  --lm-radius-lg: 6px;
+  --lm-radius-xl: 8px;
+}
+
+[data-radius='round'] {
+  --lm-radius-xs: 10px;
+  --lm-radius-sm: 14px;
+  --lm-radius: 20px;
+  --lm-radius-lg: 28px;
+  --lm-radius-xl: 36px;
+}

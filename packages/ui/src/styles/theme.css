@@ -1,0 +1,113 @@
+/* ============================================================================
+   @askasia/admin-ui — TAILWIND BRIDGE
+   ----------------------------------------------------------------------------
+   `@theme inline` is load-bearing, and the reason this system switches at
+   runtime at all.
+
+   With a plain `@theme`, Tailwind copies the VALUE into :root at build time,
+   so `bg-surface` compiles against whatever the value was when it built —
+   flipping data-theme later would not move it, and the whole premise fails.
+
+   With `@theme inline`, Tailwind emits the REFERENCE:
+
+       .bg-surface { background-color: var(--lm-surface) }
+
+   so the utility resolves against whichever [data-theme]/[data-skin] block is
+   winning at that moment. One stylesheet, every combination, no rebuild.
+
+   Practical rule for anyone extending this: a token that must respond to an
+   axis goes here as `var(--lm-*)`; a genuinely fixed value (a breakpoint, a
+   font stack) can be literal.
+============================================================================ */
+
+@theme inline {
+  /* Surfaces */
+  --color-bg: var(--lm-bg);
+  --color-surface: var(--lm-surface);
+  --color-surface-2: var(--lm-surface-2);
+  --color-sunken: var(--lm-sunken);
+
+  /* Hairlines */
+  --color-border: var(--lm-border);
+  --color-border-strong: var(--lm-border-strong);
+
+  /* Foreground */
+  --color-fg: var(--lm-fg);
+  --color-muted: var(--lm-muted);
+  --color-subtle: var(--lm-subtle);
+
+  /* Accent */
+  --color-accent: var(--lm-accent);
+  --color-accent-hover: var(--lm-accent-hover);
+  --color-accent-soft: var(--lm-accent-soft);
+  --color-accent-soft-2: var(--lm-accent-soft-2);
+  --color-on-accent: var(--lm-on-accent);
+
+  /* Status */
+  --color-success: var(--lm-success);
+  --color-success-soft: var(--lm-success-soft);
+  --color-warn: var(--lm-warn);
+  --color-warn-soft: var(--lm-warn-soft);
+  --color-danger: var(--lm-danger);
+  --color-danger-soft: var(--lm-danger-soft);
+  --color-info: var(--lm-info);
+  --color-info-soft: var(--lm-info-soft);
+
+  /* Charts */
+  --color-c1: var(--lm-c1);
+  --color-c2: var(--lm-c2);
+  --color-c3: var(--lm-c3);
+  --color-c4: var(--lm-c4);
+  --color-c5: var(--lm-c5);
+
+  /* Radius — follows data-radius */
+  --radius-xs: var(--lm-radius-xs);
+  --radius-sm: var(--lm-radius-sm);
+  --radius-DEFAULT: var(--lm-radius);
+  --radius-md: var(--lm-radius);
+  --radius-lg: var(--lm-radius-lg);
+  --radius-xl: var(--lm-radius-xl);
+  --radius-pill: var(--lm-radius-pill);
+
+  /* Elevation */
+  --shadow-xs: var(--lm-shadow-xs);
+  --shadow-sm: var(--lm-shadow-sm);
+  --shadow-DEFAULT: var(--lm-shadow);
+  --shadow-lg: var(--lm-shadow-lg);
+
+  /* Type */
+  --font-sans: var(--lm-font-sans);
+  --font-display: var(--lm-font-display);
+  --font-mono: var(--lm-font-mono);
+
+  /* Motion */
+  --ease-smooth: var(--lm-ease);
+  --ease-exit: var(--lm-ease-out);
+
+  /* Shell metrics — follows data-density */
+  --spacing-sidebar: var(--lm-sidebar-w);
+  --spacing-sidebar-icon: var(--lm-sidebar-w-icon);
+  --spacing-topbar: var(--lm-topbar-h);
+  --spacing-bottomnav: var(--lm-bottomnav-h);
+}
+
+/* Breakpoints are structural, not themable — literal values are correct here.
+   Mobile-first: these are min-widths, and the base styles are the phone. */
+@theme {
+  --breakpoint-xs: 22.5rem;  /* 360px  — small phone           */
+  --breakpoint-sm: 40rem;    /* 640px  — large phone / phablet */
+  --breakpoint-md: 48rem;    /* 768px  — tablet portrait       */
+  --breakpoint-lg: 64rem;    /* 1024px — tablet land / laptop  */
+  --breakpoint-xl: 80rem;    /* 1280px — desktop               */
+  --breakpoint-2xl: 96rem;   /* 1536px — wide                  */
+}
+
+/* Custom variants so component CSS can target an axis without re-deriving
+   the selector each time. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+@custom-variant sepia (&:where([data-theme='sepia'], [data-theme='sepia'] *));
+
+/* Pointer-type variants. The reason a "compact" density can never ship a
+   28px tap target on a phone — see base.css. */
+@custom-variant touch (@media (pointer: coarse));
+@custom-variant fine (@media (pointer: fine));

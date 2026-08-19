@@ -1,0 +1,27 @@
+/* ============================================================================
+   @askasia/admin-ui — stylesheet entry point
+
+   Consumers import exactly this one file:
+
+       @import '@askasia/admin-ui/styles';
+
+   Order matters:
+     1. tailwindcss  — must precede @theme so the theme can extend it
+     2. tokens       — plain CSS vars; the runtime-switchable source of truth
+     3. skins        — hue-only overrides layered on top of tokens
+     4. theme        — @theme inline, binding Tailwind's scale to those vars
+     5. base         — element defaults + a11y floors
+     6. components   — named semantic classes
+============================================================================ */
+
+@import 'tailwindcss';
+
+@import './tokens.css';
+@import './skins.css';
+@import './theme.css';
+@import './base.css';
+@import './components.css';
+
+/* Scan this package's own components so their utility classes are generated
+   even though the consumer's Tailwind never sees our source directory. */
+@source "../";

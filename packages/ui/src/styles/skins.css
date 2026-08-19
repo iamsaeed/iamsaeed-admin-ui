@@ -1,0 +1,56 @@
+/* ============================================================================
+   @askasia/admin-ui — SKINS
+   ----------------------------------------------------------------------------
+   A skin is two numbers: a hue and a chroma.
+
+   Because every accent shade in tokens.css is `oklch(L C var(--lm-accent-h))`,
+   setting the hue regenerates the whole ramp — hover, soft, soft-2, on-accent,
+   focus ring, chart series 1 — at a perceptually constant lightness. That is
+   what oklch buys us and what a Sass `$primary: #6d4aff` cannot do: with hex
+   ramps you must hand-pick every shade per brand and re-verify contrast.
+
+   It was one number until the contrast suite was written, and the second
+   number is the honest consequence of what that suite found: sRGB's gamut is
+   not hue-uniform, so a single shared chroma either washes out violet (which
+   supports 0.29 at L=0.52) or silently clips teal (which tops out at 0.083).
+   The original theme used 0.18 everywhere and clipped four of its own skins.
+   `--lm-skin-c` is each skin's measured ceiling.
+
+   ADDING A BRAND SKIN — the whole file you write is:
+
+       [data-skin='acme'] { --lm-accent-h: 12; --lm-skin-c: 0.18; }
+
+   Pick the chroma by running the contrast suite: it asserts gamut and WCAG AA
+   for every role in every theme, so a value that is too high fails loudly
+   rather than shipping a clipped colour. Lightness stays fixed in tokens.css,
+   which is what keeps contrast preserved by construction.
+
+   ARBITRARY / RUNTIME BRAND COLOUR — no CSS at all, no rebuild:
+
+       document.documentElement.style.setProperty('--lm-accent-h', hue)
+       document.documentElement.style.setProperty('--lm-skin-c', chroma)
+
+   which is how a per-tenant colour out of Postgres reaches the UI.
+
+   WHY NOT LIGHTNESS: lightness is what carries contrast. Hue is free, and
+   chroma only affects how vivid a colour is (and whether it is displayable) —
+   neither can make text unreadable on its own. Lightness can, so it stays in
+   tokens.css where the contrast suite governs it.
+============================================================================ */
+
+[data-skin='violet'] { --lm-accent-h: 290; --lm-skin-c: 0.216; }
+[data-skin='indigo'] { --lm-accent-h: 275; --lm-skin-c: 0.202; }
+[data-skin='blue']   { --lm-accent-h: 250; --lm-skin-c: 0.128; }
+[data-skin='teal']   { --lm-accent-h: 195; --lm-skin-c: 0.076; }
+[data-skin='green']  { --lm-accent-h: 155; --lm-skin-c: 0.112; }
+[data-skin='amber']  { --lm-accent-h: 75;  --lm-skin-c: 0.096; }
+[data-skin='rose']   { --lm-accent-h: 20;  --lm-skin-c: 0.181; }
+
+/* Slate reads as a restrained blue-grey. It used to override the whole L/C
+   ramp to force a near-monochrome accent, which meant it silently opted out
+   of every lightness the contrast suite governs — exactly the kind of local
+   exception that rots. It is now an ordinary two-number skin like the rest.
+
+   If you genuinely want a monochrome accent, drop `--lm-skin-c` toward 0.02
+   rather than overriding lightness. */
+[data-skin='slate'] { --lm-accent-h: 265; --lm-skin-c: 0.2; }
