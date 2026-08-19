@@ -1,9 +1,9 @@
 /**
- * `@askasia/admin-ui/views` — the ported screens, as importable scaffolding.
+ * `@iamsaeed/admin-ui/views` — the ported screens, as importable scaffolding.
  *
  * A separate entry from the main barrel on purpose: these are STARTING POINTS
  * carrying demo data, not part of the design system. An app that imports only
- * `@askasia/admin-ui` never pays for them.
+ * `@iamsaeed/admin-ui` never pays for them.
  *
  * Typical use is to copy one into your app and replace its data source, or to
  * mount it directly while the real screen is being built.

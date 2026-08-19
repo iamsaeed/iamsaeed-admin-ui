@@ -1,8 +1,8 @@
 /**
- * @askasia/admin-ui — public API
+ * @iamsaeed/admin-ui — public API
  *
  * Styles are NOT imported here; a consumer imports them once, explicitly:
- *     @import '@askasia/admin-ui/styles';
+ *     @import '@iamsaeed/admin-ui/styles';
  * Keeping CSS out of the JS entry means a Blade page can use the stylesheet
  * without pulling the whole component bundle.
  */

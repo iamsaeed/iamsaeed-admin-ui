@@ -12,7 +12,7 @@
     "noEmit": true,
     "types": ["vite/client"],
     "paths": {
-      "@askasia/admin-ui": ["../../packages/ui/src/index.ts"],
+      "@iamsaeed/admin-ui": ["../../packages/ui/src/index.ts"],
       "@ui/*": ["../../packages/ui/src/*"],
       "@/*": ["./src/*"]
     }

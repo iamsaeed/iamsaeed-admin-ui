@@ -1,4 +1,4 @@
-# Plan: `@askasia/admin-ui` — the reusable admin theme
+# Plan: `@iamsaeed/admin-ui` — the reusable admin theme
 
 **Status:** v1 complete (2026-08-19). Type-check clean, build green, all 34 routes
 mount with zero runtime errors. Not yet committed; not yet adopted by a consumer.
@@ -88,7 +88,7 @@ colours and repeated utilities live in named classes, never scattered hex.
 
 ```
 ~/www/themes/admin-panel/
-├── packages/ui/          @askasia/admin-ui — the published library
+├── packages/ui/          @iamsaeed/admin-ui — the published library
 │   └── src/
 │       ├── styles/       tokens · skins · base · components (the design system)
 │       ├── components/   layout · ui · dashboard · auth
@@ -98,7 +98,7 @@ colours and repeated utilities live in named classes, never scattered hex.
 └── apps/docs/            living style guide — browse/QA every component in every axis
 ```
 
-Consumers install the package and import `@askasia/admin-ui/styles`. No copy-paste.
+Consumers install the package and import `@iamsaeed/admin-ui/styles`. No copy-paste.
 
 ## Phases
 

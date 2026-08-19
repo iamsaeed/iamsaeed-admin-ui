@@ -5,7 +5,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
  * nav data reference `kit.foundations`, never `/kit/foundations`.
  *
  * Views are imported from the PACKAGE, not from this app: the docs site is a
- * consumer of `@askasia/admin-ui`, which is the only honest way to prove the
+ * consumer of `@iamsaeed/admin-ui`, which is the only honest way to prove the
  * exported screens actually work outside the repo that defines them.
  *
  * Imports are written out statically rather than built from a template string

@@ -1,5 +1,5 @@
 /* ============================================================================
-   @askasia/admin-ui — TOKENS
+   @iamsaeed/admin-ui — TOKENS
    ----------------------------------------------------------------------------
    Layer 1 (primitives) and Layer 2 (semantic roles). Components consume ONLY
    Layer 2 (`--lm-*`). Nothing in this file is a Tailwind concern — the bridge

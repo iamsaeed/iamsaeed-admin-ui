@@ -1,4 +1,4 @@
-import type { BottomNavItem, NavSchema } from '@askasia/admin-ui'
+import type { BottomNavItem, NavSchema } from '@iamsaeed/admin-ui'
 
 /**
  * Nav is data the app owns — the shell renders whatever it is handed.

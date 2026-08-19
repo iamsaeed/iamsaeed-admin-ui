@@ -1,5 +1,5 @@
 {
-  "name": "@askasia/admin-panel",
+  "name": "@iamsaeed/admin-panel",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -9,9 +9,9 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=@askasia/admin-docs",
-    "build": "npm run build --workspace=@askasia/admin-ui && npm run build --workspace=@askasia/admin-docs",
-    "build:ui": "npm run build --workspace=@askasia/admin-ui",
+    "dev": "npm run dev --workspace=@iamsaeed/admin-docs",
+    "build": "npm run build --workspace=@iamsaeed/admin-ui && npm run build --workspace=@iamsaeed/admin-docs",
+    "build:ui": "npm run build --workspace=@iamsaeed/admin-ui",
     "type-check": "npm run type-check --workspaces --if-present"
   }
 }

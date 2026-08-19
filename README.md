@@ -1,10 +1,10 @@
-# `@askasia/admin-ui`
+# `@iamsaeed/admin-ui`
 
 A mobile-first, runtime-skinnable Vue 3 admin design system. Install it as a dependency instead
 of porting the same theme into a fifth project.
 
 ```
-packages/ui     @askasia/admin-ui  — the library
+packages/ui     @iamsaeed/admin-ui  — the library
 apps/docs       living style guide — every component, in every axis
 ```
 
@@ -24,19 +24,19 @@ npm install "file:../../themes/admin-panel/packages/ui"    # or a git URL
 
 ```css
 /* app.css — one import brings tokens, base styles and component classes */
-@import '@askasia/admin-ui/styles';
+@import '@iamsaeed/admin-ui/styles';
 @source "./resources/js";   /* so Tailwind scans YOUR templates too */
 ```
 
 ```ts
-import { AdminLayout, TweaksPanel, useTheme } from '@askasia/admin-ui'
+import { AdminLayout, TweaksPanel, useTheme } from '@iamsaeed/admin-ui'
 ```
 
 Add the FOUC guard to your HTML `<head>`, **before** the stylesheet — without it every cold load
 flashes the default theme before your saved one applies:
 
 ```ts
-import { themeInitScript } from '@askasia/admin-ui'
+import { themeInitScript } from '@iamsaeed/admin-ui'
 // Blade: <script>{!! $adminUiInitScript !!}</script>
 ```
 
@@ -200,7 +200,7 @@ loses their place every single time.
 | Composables | `useTheme`, `useSidebar`, `useBreakpoint`, `useIsDesktop`, `useIsTouch`, `useFocusTrap` |
 | Icons | 60 Lucide-style stroke icons, `currentColor` throughout |
 | Component classes | ~60 named classes — `.card` `.btn` `.form-*` `.data-table` `.badge` `.alert` `.modal` `.menu` `.nav-item` `.kpi` … |
-| Views | 34 ported screens under `@askasia/admin-ui/views`, incl. a 12-page style guide |
+| Views | 34 ported screens under `@iamsaeed/admin-ui/views`, incl. a 12-page style guide |
 
 Views are **starting points carrying demo data**, exported from a separate entry so an app that
 never imports one doesn't ship it.

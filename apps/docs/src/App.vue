@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { AdminLayout, TweaksPanel, useSidebar } from '@askasia/admin-ui'
+import { AdminLayout, TweaksPanel, useSidebar } from '@iamsaeed/admin-ui'
 import { BOTTOM_NAV, DOCS_NAV } from './data/nav'
 
 const router = useRouter()

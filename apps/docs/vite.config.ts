@@ -9,7 +9,7 @@ export default defineConfig({
     alias: {
       // Point at source, not dist — the docs app is how we develop the
       // library, so HMR must reach the package's own .vue files.
-      '@askasia/admin-ui': fileURLToPath(new URL('../../packages/ui/src/index.ts', import.meta.url)),
+      '@iamsaeed/admin-ui': fileURLToPath(new URL('../../packages/ui/src/index.ts', import.meta.url)),
       '@ui': fileURLToPath(new URL('../../packages/ui/src', import.meta.url)),
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },

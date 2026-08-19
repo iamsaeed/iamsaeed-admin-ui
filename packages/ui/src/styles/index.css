@@ -1,9 +1,9 @@
 /* ============================================================================
-   @askasia/admin-ui — stylesheet entry point
+   @iamsaeed/admin-ui — stylesheet entry point
 
    Consumers import exactly this one file:
 
-       @import '@askasia/admin-ui/styles';
+       @import '@iamsaeed/admin-ui/styles';
 
    Order matters:
      1. tailwindcss  — must precede @theme so the theme can extend it

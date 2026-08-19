@@ -1,5 +1,5 @@
 {
-  "name": "@askasia/admin-ui",
+  "name": "@iamsaeed/admin-ui",
   "version": "0.1.0",
   "type": "module",
   "description": "Runtime-skinnable Vue 3 admin design system \u2014 tokens, shell, primitives, views",

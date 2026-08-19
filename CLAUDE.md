@@ -4,15 +4,15 @@ Guidance for Claude Code when working in `~/www/themes/admin-panel`.
 
 ## What This Is
 
-`@askasia/admin-ui` — a mobile-first, runtime-skinnable Vue 3 admin design system, published as
+`@iamsaeed/admin-ui` — a mobile-first, runtime-skinnable Vue 3 admin design system, published as
 an npm package and consumed by other projects. **Not an application.** It exists to end the
 five-times-hand-ported Lumen theme (see README "Origin").
 
 npm workspaces monorepo, no Laravel, no backend:
 
 ```
-packages/ui     @askasia/admin-ui — the library (tokens, shell, primitives, views)
-apps/docs       @askasia/admin-docs — living style guide, a CONSUMER of the package
+packages/ui     @iamsaeed/admin-ui — the library (tokens, shell, primitives, views)
+apps/docs       @iamsaeed/admin-docs — living style guide, a CONSUMER of the package
 plans/          design record + TODO.md
 ```
 
@@ -24,7 +24,7 @@ npm run dev                 # style guide on http://127.0.0.1:5200
 npm run build               # library + docs
 npm run build:ui            # library only
 npm run type-check          # vue-tsc across both workspaces
-npm test --workspace=@askasia/admin-ui   # 480 assertions (contrast, gamut, colour maths, focus trap, theme state)
+npm test --workspace=@iamsaeed/admin-ui   # 480 assertions (contrast, gamut, colour maths, focus trap, theme state)
 ```
 
 **Verification is three-layered**: `npm test` green, `npm run type-check` clean, `npm run build`
