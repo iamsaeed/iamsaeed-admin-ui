@@ -5,7 +5,9 @@ Tasks are added as `- [ ]` under the current date. Only the user checks items of
 ## 2026-08-19
 
 - [ ] Review the built theme and confirm the direction before it is adopted anywhere
-- [ ] Decide the distribution mechanism: `file:` path, git URL, or a private npm registry
+- [ ] Decide the distribution mechanism — now that the repo exists, a git URL works today:
+      `npm i git+ssh://git@github.com/iamsaeed/askasia-admin-ui.git#main` (consumers need repo access,
+      and it installs the monorepo root, so a `packages/ui` subpath or a published tarball may be needed)
 - [ ] Adopt in one real project as a pilot (aptire full-stack-app is the closest fit)
 - [x] Add a test suite — 445 assertions: WCAG AA + sRGB gamut for every theme × skin, colour
       maths pinned against Chrome, palette snapshot. Found and fixed six real contrast failures
@@ -19,4 +21,4 @@ Tasks are added as `- [ ]` under the current date. Only the user checks items of
 - [ ] `useSidebar` tests (breakpoint transitions, body-scroll lock)
 - [ ] Decide whether `data-density` should be user-facing or dev-only in shipped products
 - [ ] RTL support (token architecture allows it; implementation deferred)
-- [ ] First git commit — repo is initialised but nothing is committed yet
+- [x] First git commit + push — `iamsaeed/askasia-admin-ui` (private, personal account), branch `main`
