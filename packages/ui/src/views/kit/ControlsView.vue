@@ -45,7 +45,14 @@ const range = ref(60)
 
     <KitBlock label="Range">
       <div class="w-full max-w-sm flex items-center gap-3">
-        <input v-model.number="range" type="range" min="0" max="100" class="flex-1" />
+        <input
+          v-model.number="range"
+          type="range"
+          min="0"
+          max="100"
+          class="flex-1"
+          aria-label="Example range"
+        />
         <span class="tnum text-xs text-muted w-8 text-right">{{ range }}</span>
       </div>
     </KitBlock>

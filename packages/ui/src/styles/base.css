@@ -55,6 +55,20 @@
   }
   a:hover { color: var(--lm-accent-hover); }
 
+  /* WCAG 1.4.1: a link sitting INSIDE a block of text must be distinguishable
+     by something other than colour, because colour alone fails for the ~8% of
+     men with a colour-vision deficiency — and an accent-on-body-text pair is
+     around 1.0:1 in luminance here, so there is nothing else to see.
+
+     Scoped to running text on purpose. Nav items, cards, table cells and
+     buttons carry their own affordances (position, box, hover state) and are
+     exempt under 1.4.1; underlining those would be noise, not accessibility. */
+  p a, li a, dd a, blockquote a, figcaption a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: from-font;
+  }
+
   hr {
     border: 0;
     border-top: 1px solid var(--lm-border);

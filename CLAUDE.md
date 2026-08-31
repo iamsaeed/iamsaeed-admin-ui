@@ -24,12 +24,38 @@ npm run dev                 # style guide on http://127.0.0.1:5200
 npm run build               # library + docs
 npm run build:ui            # library only
 npm run type-check          # vue-tsc across both workspaces
-npm test --workspace=@iamsaeed/admin-ui   # 480 assertions (contrast, gamut, colour maths, focus trap, theme state)
+npm test --workspace=@iamsaeed/admin-ui   # 504 assertions (contrast, gamut, colour maths, focus trap, theme state)
+npm run test:a11y           # axe-core over the BUILT docs app: 35 routes x 3 themes x 2 viewports
 ```
 
-**Verification is three-layered**: `npm test` green, `npm run type-check` clean, `npm run build`
+**Verification is four-layered**: `npm test` green, `npm run type-check` clean, `npm run build`
 green, and the docs app rendering the changed surface in light + dark + sepia at 375px and 1440px
 with zero console errors.
+
+`npm run test:a11y` is the fourth layer, and it exists because the other three
+cannot see it. `contrast.test.ts` proves the TOKENS are accessible; it cannot prove the markup
+uses them at a size that earns their bar. On 2026-08-19 an external axe-core audit found 1287
+WCAG 1.4.3 failures while all 480 assertions were green: `--lm-subtle` was held to the large-text
+threshold on the stated assumption it was "never body copy", and the views applied it to 10px
+text. Three critical `4.1.2` name failures (row checkboxes, a filter select, a switch) were
+invisible to a token suite by construction.
+
+Two rules follow from that:
+
+1. **A token may only be exempted from the normal-text bar if the markup provably never uses it
+   at normal-text size.** Nothing in a token test can prove that, so do not assert an exemption
+   there — let `test:a11y` audit the rendered page instead.
+2. **The audit must stamp `data-theme` explicitly.** Headless Chrome resolves
+   `prefers-color-scheme` to dark and the default theme is `system`, so an audit that skips the
+   stamp silently measures dark only. Dark was 44 failing nodes when light was 485.
+
+The same audit exposed a real nesting bug the token suite structurally could not: `--lm-accent-c`
+was declared in the theme block as `calc(var(--lm-skin-c) * 1)`, so its `var()` substituted at
+`:root` and every nested `[data-skin]` inherited the ROOT skin's chroma with its own hue — teal
+rendering as `oklch(0.52 0.216 195)` instead of `oklch(0.52 0.076 195)`. The theme now owns a
+scalar `--lm-accent-c-mult`, and the chroma is composed in the `:root, [data-skin]` rule beside
+the ramp, for exactly the reason the ramp lives there. The token resolver models one flattened
+element, so it can never catch this class of bug — only the rendered audit can.
 
 `tests/contrast.test.ts` is the important one. It parses the REAL `tokens.css` (so it cannot drift
 from the stylesheet) and asserts WCAG AA plus sRGB gamut for every role across all 24 theme × skin

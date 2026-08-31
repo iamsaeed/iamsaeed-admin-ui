@@ -64,7 +64,7 @@
   /* Foreground, by prominence */
   --lm-fg: oklch(0.22 0.01 var(--lm-neutral-h));
   --lm-muted: oklch(0.5 0.012 var(--lm-neutral-h));
-  --lm-subtle: oklch(0.65 0.01 var(--lm-neutral-h));
+  --lm-subtle: oklch(0.547 0.01 var(--lm-neutral-h));
 
   /* Accent — lightness/chroma INPUTS only. The ramp is composed further
      down, in the `:root, [data-skin]` rule.
@@ -77,8 +77,8 @@
      lightest solid on which near-white label text still clears WCAG AA
      (4.5:1) for all eight hues. The previous 0.62 gave 2.97:1 — primary
      button labels genuinely failed. */
-  --lm-accent-l: 0.52;       --lm-accent-c: calc(var(--lm-skin-c) * 1);
-  --lm-accent-hover-l: 0.45; --lm-accent-hover-c: calc(var(--lm-skin-c) * 0.92);
+  --lm-accent-l: 0.52;       --lm-accent-c-mult: 1;
+  --lm-accent-hover-l: 0.45; --lm-accent-hover-c-mult: 0.92;
   --lm-accent-soft-l: 0.95;  --lm-accent-soft-c: 0.021;
   --lm-accent-soft-2-l: 0.9; --lm-accent-soft-2-c: 0.043;
   --lm-on-accent-l: 0.99;    --lm-on-accent-c: 0.004;
@@ -170,6 +170,18 @@
 
 :root,
 [data-skin] {
+  /* Chroma is composed HERE, not in the theme block, for the same reason the
+     ramp is. `--lm-accent-c: calc(var(--lm-skin-c) * 1)` written at :root has
+     its var() substituted at :root — so every nested [data-skin] inherited
+     the ROOT skin's chroma with its OWN hue. Every nested skin rendered at
+     violet's 0.216: teal shipped as oklch(0.52 0.216 195) instead of
+     oklch(0.52 0.076 195), which is out of its solved gamut and failed AA on
+     primary buttons at 4.11:1 (green 4.45:1).
+     The theme keeps the MULTIPLIER (a plain number, safe to inherit); the
+     skin's own chroma is read here, where the nested element is in scope. */
+  --lm-accent-c: calc(var(--lm-skin-c) * var(--lm-accent-c-mult));
+  --lm-accent-hover-c: calc(var(--lm-skin-c) * var(--lm-accent-hover-c-mult));
+
   --lm-accent: oklch(var(--lm-accent-l) var(--lm-accent-c) var(--lm-accent-h));
   --lm-accent-hover: oklch(var(--lm-accent-hover-l) var(--lm-accent-hover-c) var(--lm-accent-h));
   --lm-accent-soft: oklch(var(--lm-accent-soft-l) var(--lm-accent-soft-c) var(--lm-accent-h));
@@ -195,13 +207,13 @@
 
   --lm-fg: oklch(0.97 0.005 var(--lm-neutral-h));
   --lm-muted: oklch(0.72 0.012 var(--lm-neutral-h));
-  --lm-subtle: oklch(0.55 0.014 var(--lm-neutral-h));
+  --lm-subtle: oklch(0.607 0.014 var(--lm-neutral-h));
 
   /* Accent lifts in lightness on dark ground — same hue, correct contrast.
      Only the L/C inputs move; the ramp itself is composed above, so this
      stays true for a nested skin too.                                    */
-  --lm-accent-l: 0.72;       --lm-accent-c: calc(var(--lm-skin-c) * 0.62);
-  --lm-accent-hover-l: 0.78; --lm-accent-hover-c: calc(var(--lm-skin-c) * 0.52);
+  --lm-accent-l: 0.72;       --lm-accent-c-mult: 0.62;
+  --lm-accent-hover-l: 0.78; --lm-accent-hover-c-mult: 0.52;
   --lm-accent-soft-l: 0.3;   --lm-accent-soft-c: 0.048;
   --lm-accent-soft-2-l: 0.36; --lm-accent-soft-2-c: 0.056;
   --lm-on-accent-l: 0.15;    --lm-on-accent-c: 0.01;
@@ -242,13 +254,16 @@
 
   --lm-fg: oklch(0.26 0.04 50);
   --lm-muted: oklch(0.5 0.045 55);
-  --lm-subtle: oklch(0.62 0.04 60);
+  --lm-subtle: oklch(0.51 0.04 60);
 
   /* Sepia deepens the accent instead of lifting it — a paper ground needs
      more contrast from ink, not less. */
-  --lm-accent-l: 0.48;        --lm-accent-c: calc(var(--lm-skin-c) * 0.95);
-  --lm-accent-hover-l: 0.42;  --lm-accent-hover-c: calc(var(--lm-skin-c) * 0.88);
-  --lm-accent-soft-l: 0.9;    --lm-accent-soft-c: 0.043;
+  --lm-accent-l: 0.48;        --lm-accent-c-mult: 0.95;
+  --lm-accent-hover-l: 0.42;  --lm-accent-hover-c-mult: 0.88;
+  /* 0.91, not 0.9: muted text sits on this panel (marketing callout, the
+     appearance preview) and at 0.9 that pair was 4.44:1 for rose. 0.92+ would
+     give more headroom but clips the sRGB gamut, which the suite forbids. */
+  --lm-accent-soft-l: 0.91;   --lm-accent-soft-c: 0.043;
   --lm-accent-soft-2-l: 0.85; --lm-accent-soft-2-c: 0.066;
   --lm-on-accent-l: 0.98;     --lm-on-accent-c: 0.008;
 
@@ -279,9 +294,9 @@
     --lm-border-strong: oklch(0.36 0.016 var(--lm-neutral-h));
     --lm-fg: oklch(0.97 0.005 var(--lm-neutral-h));
     --lm-muted: oklch(0.72 0.012 var(--lm-neutral-h));
-    --lm-subtle: oklch(0.55 0.014 var(--lm-neutral-h));
-    --lm-accent-l: 0.72;        --lm-accent-c: calc(var(--lm-skin-c) * 0.62);
-    --lm-accent-hover-l: 0.78;  --lm-accent-hover-c: calc(var(--lm-skin-c) * 0.52);
+    --lm-subtle: oklch(0.607 0.014 var(--lm-neutral-h));
+    --lm-accent-l: 0.72;        --lm-accent-c-mult: 0.62;
+    --lm-accent-hover-l: 0.78;  --lm-accent-hover-c-mult: 0.52;
     --lm-accent-soft-l: 0.3;    --lm-accent-soft-c: 0.048;
     --lm-accent-soft-2-l: 0.36; --lm-accent-soft-2-c: 0.056;
     --lm-on-accent-l: 0.15;     --lm-on-accent-c: 0.01;

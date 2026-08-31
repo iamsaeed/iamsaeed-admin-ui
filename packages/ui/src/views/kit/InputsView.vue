@@ -55,12 +55,18 @@ const on = ref(true)
     </KitBlock>
 
     <KitBlock label="Disabled">
-      <input class="form-input max-w-sm" value="Read only" disabled />
+      <input class="form-input max-w-sm" value="Read only" aria-label="Read-only example" disabled />
     </KitBlock>
 
     <KitBlock label="Switch">
-      <button class="switch" role="switch" :aria-checked="on" @click="on = !on" />
-      <span class="text-xs text-muted">Publish immediately</span>
+      <button
+        class="switch"
+        role="switch"
+        :aria-checked="on"
+        aria-label="Publish immediately"
+        @click="on = !on"
+      />
+      <span class="text-xs text-muted" aria-hidden="true">Publish immediately</span>
     </KitBlock>
 
     <KitBlock label="Two-column row — stacks below md">

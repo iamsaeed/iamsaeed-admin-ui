@@ -239,7 +239,7 @@ exports[`palette snapshot > sepia 1`] = `
   "amber": {
     "accent": "#7b5516",
     "accent-hover": "#684508",
-    "accent-soft": "#efdbbf",
+    "accent-soft": "#f3dec2",
     "bg": "#f7ebdb",
     "danger": "#c3232b",
     "fg": "#341e12",
@@ -253,7 +253,7 @@ exports[`palette snapshot > sepia 1`] = `
   "blue": {
     "accent": "#19609f",
     "accent-hover": "#0a4f87",
-    "accent-soft": "#c9e1fa",
+    "accent-soft": "#cce4fe",
     "bg": "#f7ebdb",
     "danger": "#c3232b",
     "fg": "#341e12",
@@ -267,7 +267,7 @@ exports[`palette snapshot > sepia 1`] = `
   "green": {
     "accent": "#1b6f42",
     "accent-hover": "#0c5c34",
-    "accent-soft": "#c9e7d2",
+    "accent-soft": "#ccead5",
     "bg": "#f7ebdb",
     "danger": "#c3232b",
     "fg": "#341e12",
@@ -281,7 +281,7 @@ exports[`palette snapshot > sepia 1`] = `
   "indigo": {
     "accent": "#4448c7",
     "accent-hover": "#3739ab",
-    "accent-soft": "#d5dcfb",
+    "accent-soft": "#d8e0ff",
     "bg": "#f7ebdb",
     "danger": "#c3232b",
     "fg": "#341e12",
@@ -295,7 +295,7 @@ exports[`palette snapshot > sepia 1`] = `
   "rose": {
     "accent": "#a91f32",
     "accent-hover": "#900f26",
-    "accent-soft": "#fad3d2",
+    "accent-soft": "#fdd7d5",
     "bg": "#f7ebdb",
     "danger": "#c3232b",
     "fg": "#341e12",
@@ -309,7 +309,7 @@ exports[`palette snapshot > sepia 1`] = `
   "slate": {
     "accent": "#2750c7",
     "accent-hover": "#1c40ab",
-    "accent-soft": "#d0defc",
+    "accent-soft": "#d3e2ff",
     "bg": "#f7ebdb",
     "danger": "#c3232b",
     "fg": "#341e12",
@@ -323,7 +323,7 @@ exports[`palette snapshot > sepia 1`] = `
   "teal": {
     "accent": "#1d6a6a",
     "accent-hover": "#0f5858",
-    "accent-soft": "#bee8e7",
+    "accent-soft": "#c1ebea",
     "bg": "#f7ebdb",
     "danger": "#c3232b",
     "fg": "#341e12",
@@ -337,7 +337,7 @@ exports[`palette snapshot > sepia 1`] = `
   "violet": {
     "accent": "#6238c6",
     "accent-hover": "#5229aa",
-    "accent-soft": "#dddaf9",
+    "accent-soft": "#e0ddfd",
     "bg": "#f7ebdb",
     "danger": "#c3232b",
     "fg": "#341e12",

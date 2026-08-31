@@ -90,7 +90,12 @@ function toggle(id: string | number) {
         <tbody>
           <tr role="row" v-for="r in filtered" :key="r.id">
             <td role="cell" data-label="">
-              <input type="checkbox" :checked="selected.has(r.id)" @change="toggle(r.id)" />
+              <input
+                type="checkbox"
+                :checked="selected.has(r.id)"
+                :aria-label="`Select ${r.title}`"
+                @change="toggle(r.id)"
+              />
             </td>
             <td role="cell" data-label="Title">
               <button class="font-medium text-left hover:text-accent" @click="emit('open', r.id)">

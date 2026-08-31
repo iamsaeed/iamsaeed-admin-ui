@@ -22,8 +22,10 @@ withDefaults(
 
 <template>
   <div class="min-h-dvh bg-bg text-fg lg:grid lg:grid-cols-2">
-    <!-- Form column -->
-    <div class="flex flex-col justify-center px-5 py-10 sm:px-10 lg:px-16">
+    <!-- Form column. This is the <main> landmark: the art column beside it is
+         aria-hidden, so without this every auth page has no landmark at all
+         and screen-reader users get no skip target. -->
+    <main class="flex flex-col justify-center px-5 py-10 sm:px-10 lg:px-16">
       <div class="w-full max-w-sm mx-auto">
         <div class="flex items-center gap-3 mb-8">
           <div
@@ -40,7 +42,7 @@ withDefaults(
 
         <slot />
       </div>
-    </div>
+    </main>
 
     <!-- Art column — desktop only, and purely decorative. -->
     <div

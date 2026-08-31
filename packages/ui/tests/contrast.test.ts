@@ -78,14 +78,22 @@ describe.each(COMBOS)('$theme · $skin', ({ theme, skin }) => {
     }
   })
 
-  it('subtle text clears the large-text bar', () => {
-    // `--lm-subtle` is used only for overlines, captions and placeholders —
-    // never for body copy — so AA-large is the correct bar for it.
-    for (const surface of ['--lm-surface', '--lm-surface-2']) {
+  it('subtle text meets AA on every surface', () => {
+    // This used to be held to AA-LARGE on the stated assumption that
+    // `--lm-subtle` was 'only overlines, captions and placeholders — never
+    // body copy'. An axe-core audit of the rendered DOM (2026-08-19) found it
+    // on 10px and 11px text in .text-subtle and .nav-section, which is normal
+    // text by WCAG 1.4.3 and owes 4.5:1. The token was not wrong; the bar was.
+    //
+    // The lesson is general: this file tests TOKENS, and a token can only be
+    // exempted from the normal-text bar if the markup provably never uses it
+    // at normal-text size. Nothing here can prove that, so it does not try —
+    // `npm run test:a11y` audits the rendered pages instead.
+    for (const surface of ['--lm-bg', '--lm-surface', '--lm-surface-2', '--lm-sunken']) {
       expect(
         contrastRatio(c('--lm-subtle'), c(surface)),
         `--lm-subtle on ${surface}`,
-      ).toBeGreaterThanOrEqual(AA_LARGE)
+      ).toBeGreaterThanOrEqual(AA_NORMAL)
     }
   })
 
@@ -100,6 +108,14 @@ describe.each(COMBOS)('$theme · $skin', ({ theme, skin }) => {
     expect(contrastRatio(c('--lm-on-accent'), c('--lm-accent-hover'))).toBeGreaterThanOrEqual(
       AA_NORMAL,
     )
+  })
+
+  it('muted text on soft accent meets AA', () => {
+    // The soft accent is a PANEL as well as a badge — the marketing callout
+    // and the appearance preview both print --lm-muted on it. That pair was
+    // never asserted, and the rendered-DOM audit caught it failing at 4.44:1
+    // in sepia while every assertion in this file was green.
+    expect(contrastRatio(c('--lm-muted'), c('--lm-accent-soft'))).toBeGreaterThanOrEqual(AA_NORMAL)
   })
 
   it('accent text on soft accent (badges, soft buttons) meets AA', () => {

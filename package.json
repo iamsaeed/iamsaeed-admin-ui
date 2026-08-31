@@ -12,6 +12,12 @@
     "dev": "npm run dev --workspace=@iamsaeed/admin-docs",
     "build": "npm run build --workspace=@iamsaeed/admin-ui && npm run build --workspace=@iamsaeed/admin-docs",
     "build:ui": "npm run build --workspace=@iamsaeed/admin-ui",
-    "type-check": "npm run type-check --workspaces --if-present"
+    "type-check": "npm run type-check --workspaces --if-present",
+    "test:a11y": "npm run build && node scripts/axe-audit.mjs",
+    "test:a11y:only": "node scripts/axe-audit.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "^4.13.0",
+    "puppeteer-core": "^24.0.0"
   }
 }

@@ -46,7 +46,11 @@ const matrix: Record<string, boolean[]> = {
 
   <div class="card">
     <div class="card-hd"><div class="card-title">Permission matrix</div></div>
-    <div class="table-wrap">
+    <!-- tabindex + role: this table is the one grid on the site with no
+         focusable cell content, so on a narrow viewport its horizontal scroll
+         was unreachable by keyboard (WCAG 2.1.1). Tables whose cells contain
+         buttons or links are already reachable and must NOT get a tab stop. -->
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Permission matrix">
       <table class="data-table" role="table">
         <thead>
           <tr role="row"><th role="columnheader">Permission</th><th role="columnheader" v-for="r in roles" :key="r.name" class="text-center">{{ r.name }}</th></tr>

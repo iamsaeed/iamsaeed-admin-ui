@@ -31,7 +31,7 @@ const badgeFor = (s: string) =>
       <span class="input-group-icon"><Icon name="search" :size="15" /></span>
       <input v-model="query" class="form-input" placeholder="Search people…" />
     </div>
-    <select class="form-select w-auto"><option>All roles</option><option>Owner</option><option>Editor</option></select>
+    <select class="form-select w-auto" aria-label="Filter by role"><option>All roles</option><option>Owner</option><option>Editor</option></select>
   </div>
 
   <div class="card">
