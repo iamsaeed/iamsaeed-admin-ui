@@ -189,6 +189,47 @@
     box-shadow: var(--lm-shadow-xs);
   }
 
+
+  /* ── Activity feed ──────────────────────────────────────────────────────
+     A dated list of things that happened. Standard on any admin dashboard —
+     the library's own DashboardView renders one — but it had no classes, so
+     the first consumer arrived carrying its own. */
+  .feed { display: flex; flex-direction: column; gap: var(--lm-space-1); }
+  .feed-item {
+    position: relative;
+    display: flex;
+    gap: var(--lm-space-3);
+    padding: var(--lm-space-3) var(--lm-space-1);
+  }
+  .feed-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 2.375rem;
+    height: 2.375rem;
+    border-radius: var(--lm-radius-sm);
+    background: var(--lm-sunken);
+    color: var(--lm-muted);
+  }
+
+  /* ── Definition list ────────────────────────────────────────────────────
+     Label/value pairs on a detail screen. */
+  .def-list { display: flex; flex-direction: column; margin: 0; padding: var(--lm-space-2) 0; }
+
+  /* ── Table cell helpers ─────────────────────────────────────────────────
+     .data-table styles the table; these style what goes IN a cell — the
+     primary label, its secondary line, and the trailing actions column that
+     must not steal width from the content. */
+  .td-title { font-weight: 500; color: var(--lm-fg); }
+  .td-sub { margin-top: 0.125rem; font-size: 0.6875rem; color: var(--lm-muted); }
+  .td-action { width: 1px; text-align: right; white-space: nowrap; }
+
+  /* ── Empty-state text ───────────────────────────────────────────────────
+     .empty-state and .empty-state-icon existed; the words inside them did
+     not, so every consumer had to invent the type scale. */
+  .empty-state-title { font-weight: 600; color: var(--lm-fg); }
+  .empty-state-body { margin-top: var(--lm-space-1); font-size: 0.8125rem; color: var(--lm-muted); }
+
   .fab {
     position: fixed;
     right: max(var(--lm-space-4), env(safe-area-inset-right));
