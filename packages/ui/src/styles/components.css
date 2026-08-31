@@ -190,6 +190,11 @@
   }
 
 
+  /* Muted body text. The token existed; the class did not, so a consumer with
+     72 sites of secondary text had nothing to reach for and the obvious
+     substitute (.badge-neutral) turns a sentence into a pill. */
+  .muted { color: var(--lm-muted); }
+
   /* ── Activity feed ──────────────────────────────────────────────────────
      A dated list of things that happened. Standard on any admin dashboard —
      the library's own DashboardView renders one — but it had no classes, so
