@@ -190,6 +190,12 @@
   }
 
 
+  /* Typeface utilities. The tokens existed; nothing exposed them, so a consumer
+     wanting the display face had to reach past the design system to a raw
+     font-family — exactly how a theme starts drifting. */
+  .font-display { font-family: var(--lm-font-display); }
+  .font-mono { font-family: var(--lm-font-mono); }
+
   /* Muted body text. The token existed; the class did not, so a consumer with
      72 sites of secondary text had nothing to reach for and the obvious
      substitute (.badge-neutral) turns a sentence into a pill. */
