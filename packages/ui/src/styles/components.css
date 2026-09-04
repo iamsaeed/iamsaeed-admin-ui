@@ -231,8 +231,14 @@
      .data-table styles the table; these style what goes IN a cell — the
      primary label, its secondary line, and the trailing actions column that
      must not steal width from the content. */
-  .td-title { font-weight: 500; color: var(--lm-fg); }
-  .td-sub { margin-top: 0.125rem; font-size: 0.6875rem; color: var(--lm-muted); }
+  /* `display: block` is load-bearing, not decoration. Applied to a <span> — which is what a
+     cell's label usually is — these were inline, so the secondary line ran on the same line as
+     the title ("Acme LtdHotel") and `.td-sub`'s margin-top was silently discarded, because
+     vertical margins do nothing on an inline box. The views in src/views/ sidestepped this by
+     hand-writing `block` utilities instead of using these classes, which is why the defect
+     survived: the pair was defined and then never used. */
+  .td-title { display: block; font-weight: 500; color: var(--lm-fg); }
+  .td-sub { display: block; margin-top: 0.125rem; font-size: 0.6875rem; color: var(--lm-muted); }
   .td-action { width: 1px; text-align: right; white-space: nowrap; }
 
   /* ── Empty-state text ───────────────────────────────────────────────────

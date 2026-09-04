@@ -82,7 +82,17 @@ const mobileSearchOpen = ref(false)
       />
     </div>
 
-    <div class="flex-1 lg:flex-none" />
+    <!--
+      The spacer that pins the action cluster to the right edge.
+
+      It has to grow at EVERY width, not only below `lg`. The desktop search beside it is
+      `max-w-md`, so past roughly 28rem the search stops growing — and with this collapsed to
+      `flex-none` above `lg`, nothing absorbed the remainder. The icons then sat stranded beside
+      the search with a wide empty gap to their right, which reads as a broken layout rather
+      than a deliberate one. Growing at all widths is also what already made the mobile
+      arrangement correct, so this is one rule instead of two.
+    -->
+    <div class="flex-1" />
 
     <button
       v-if="!mobileSearchOpen"
