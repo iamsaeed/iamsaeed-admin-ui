@@ -17,7 +17,7 @@ import AppTopbar from '../components/layout/AppTopbar.vue'
 import BottomNav from '../components/layout/BottomNav.vue'
 import { useFocusTrap } from '../composables/useFocusTrap'
 import { useSidebar } from '../composables/useSidebar'
-import type { BottomNavItem, NavSchema } from '../types/nav'
+import type { BottomNavItem, NavSchema, UserMenuItem } from '../types/nav'
 
 const props = withDefaults(
   defineProps<{
@@ -30,12 +30,19 @@ const props = withDefaults(
     version?: string
     userName?: string
     userEmail?: string
+    /** Account-menu entries. Omitted means Settings + Sign out. */
+    userMenuItems?: UserMenuItem[]
     notificationCount?: number
   }>(),
   {},
 )
 
-const emit = defineEmits<{ navigate: [id: string]; search: [q: string]; openTweaks: [] }>()
+const emit = defineEmits<{
+  navigate: [id: string]
+  search: [q: string]
+  openTweaks: []
+  userMenuSelect: [id: string]
+}>()
 
 const { collapsed, drawerOpen, closeDrawer } = useSidebar()
 const drawerEl = ref<HTMLElement | null>(null)
@@ -75,7 +82,9 @@ useFocusTrap(drawerOpen, drawerEl)
         :user-name="userName"
         :user-email="userEmail"
         @navigate="emit('navigate', $event)"
-      />
+      >
+        <template v-if="$slots.brand" #brand><slot name="brand" /></template>
+      </AppSidebar>
     </aside>
 
     <!-- Mobile drawer -->
@@ -113,7 +122,9 @@ useFocusTrap(drawerOpen, drawerEl)
           :user-email="userEmail"
           @navigate="emit('navigate', $event)"
           @close="closeDrawer()"
-        />
+        >
+          <template v-if="$slots.brand" #brand><slot name="brand" /></template>
+        </AppSidebar>
       </aside>
     </Transition>
 
@@ -127,9 +138,12 @@ useFocusTrap(drawerOpen, drawerEl)
       <AppTopbar
         :title="title"
         :user-name="userName"
+        :user-email="userEmail"
+        :user-menu-items="userMenuItems"
         :notification-count="notificationCount"
         @search="emit('search', $event)"
         @open-tweaks="emit('openTweaks')"
+        @user-menu-select="emit('userMenuSelect', $event)"
       >
         <template #actions><slot name="topbar-actions" /></template>
       </AppTopbar>

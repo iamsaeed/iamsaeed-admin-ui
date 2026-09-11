@@ -2,6 +2,9 @@
 import { ref } from 'vue'
 import Icon from '../../components/ui/Icon.vue'
 import KitBlock from '../../components/kit/KitBlock.vue'
+import UserMenu from '../../components/layout/UserMenu.vue'
+
+const lastAccountAction = ref('')
 
 const tab = ref('general')
 const tabs = [
@@ -63,6 +66,19 @@ const tabs = [
         <button class="menu-item"><Icon name="download" :size="15" /> Export</button>
         <div class="menu-sep" />
         <button class="menu-item menu-item-danger"><Icon name="trash" :size="15" /> Delete</button>
+      </div>
+    </KitBlock>
+
+    <KitBlock label="User menu">
+      <div class="flex items-center gap-4">
+        <UserMenu
+          user-name="Marcus Tan"
+          user-email="marcus@example.com"
+          @select="lastAccountAction = $event"
+        />
+        <span v-if="lastAccountAction" class="muted text-xs">
+          selected: <span class="font-mono">{{ lastAccountAction }}</span>
+        </span>
       </div>
     </KitBlock>
 

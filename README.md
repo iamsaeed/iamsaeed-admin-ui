@@ -196,7 +196,7 @@ loses their place every single time.
 | | |
 |---|---|
 | Layouts | `AdminLayout`, `AuthLayout` |
-| Shell | `AppSidebar`, `AppTopbar`, `BottomNav`, `TweaksPanel` |
+| Shell | `AppSidebar`, `AppTopbar`, `BottomNav`, `TweaksPanel`, `UserMenu` |
 | Composables | `useTheme`, `useSidebar`, `useBreakpoint`, `useIsDesktop`, `useIsTouch`, `useFocusTrap` |
 | Icons | 60 Lucide-style stroke icons, `currentColor` throughout |
 | Component classes | ~60 named classes — `.card` `.btn` `.form-*` `.data-table` `.badge` `.alert` `.modal` `.menu` `.nav-item` `.kpi` … |

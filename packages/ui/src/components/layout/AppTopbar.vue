@@ -10,6 +10,8 @@ import { ref } from 'vue'
 import { useSidebar } from '../../composables/useSidebar'
 import { useTheme } from '../../composables/useTheme'
 import Icon from '../ui/Icon.vue'
+import UserMenu from './UserMenu.vue'
+import type { UserMenuItem } from '../../types/nav'
 
 withDefaults(
   defineProps<{
@@ -17,12 +19,19 @@ withDefaults(
     searchPlaceholder?: string
     notificationCount?: number
     userName?: string
+    userEmail?: string
+    /** Account-menu entries. Omitted means Settings + Sign out. */
+    userMenuItems?: UserMenuItem[]
     showThemeToggle?: boolean
   }>(),
   { searchPlaceholder: 'Search…', showThemeToggle: true },
 )
 
-const emit = defineEmits<{ search: [q: string]; openTweaks: [] }>()
+const emit = defineEmits<{
+  search: [q: string]
+  openTweaks: []
+  userMenuSelect: [id: string]
+}>()
 
 const { collapsed, toggleCollapsed, openDrawer } = useSidebar()
 const { isDark, cycleTheme } = useTheme()
@@ -127,6 +136,12 @@ const mobileSearchOpen = ref(false)
       <Icon name="sliders" :size="18" label="Theme settings" />
     </button>
 
-    <span class="avatar ml-1">{{ (userName || 'U').slice(0, 1).toUpperCase() }}</span>
+    <UserMenu
+      class="ml-1"
+      :user-name="userName"
+      :user-email="userEmail"
+      :items="userMenuItems"
+      @select="emit('userMenuSelect', $event)"
+    />
   </header>
 </template>

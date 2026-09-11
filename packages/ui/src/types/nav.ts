@@ -40,3 +40,18 @@ export interface BottomNavItem {
   to?: string
   badge?: string | number
 }
+
+/**
+ * An entry in the topbar's user menu. Data, like the sidebar nav — the shell
+ * does not decide whether an app has a profile page, a workspace switcher or
+ * only a sign-out.
+ */
+export interface UserMenuItem {
+  id: string
+  label: string
+  icon?: IconName | string
+  /** Destructive styling; sign-out is the usual one. */
+  danger?: boolean
+  /** Draw a separator ABOVE this item. */
+  separated?: boolean
+}

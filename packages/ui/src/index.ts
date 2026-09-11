@@ -44,7 +44,7 @@ export {
 export type { BreakpointKey } from './composables/useBreakpoint'
 
 /* ── Types ──────────────────────────────────────────────────────────────── */
-export type { NavItem, NavSection, NavSchema, BottomNavItem } from './types/nav'
+export type { NavItem, NavSection, NavSchema, BottomNavItem, UserMenuItem } from './types/nav'
 export { ICON_NAMES, ICON_PATHS } from './components/ui/icon-paths'
 export type { IconName } from './components/ui/icon-paths'
 
@@ -57,6 +57,7 @@ export { default as AppSidebar } from './components/layout/AppSidebar.vue'
 export { default as AppTopbar } from './components/layout/AppTopbar.vue'
 export { default as BottomNav } from './components/layout/BottomNav.vue'
 export { default as TweaksPanel } from './components/layout/TweaksPanel.vue'
+export { default as UserMenu } from './components/layout/UserMenu.vue'
 
 /* ── UI ─────────────────────────────────────────────────────────────────── */
 export { default as Icon } from './components/ui/Icon.vue'

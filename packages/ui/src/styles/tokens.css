@@ -136,6 +136,9 @@
      scrim serves the drawer and the modal, so it has to be under both —
      putting it above the drawer dims the drawer itself. */
   --lm-z-sticky: 20;
+  /* Dropdowns anchored to a sticky element: above the page, below the scrim
+     so an open modal still dims anything left hanging. */
+  --lm-z-dropdown: 30;
   --lm-z-scrim: 35;
   --lm-z-drawer: 40;
   --lm-z-modal: 50;
