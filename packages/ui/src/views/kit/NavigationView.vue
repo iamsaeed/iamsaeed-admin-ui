@@ -3,8 +3,16 @@ import { ref } from 'vue'
 import Icon from '../../components/ui/Icon.vue'
 import KitBlock from '../../components/kit/KitBlock.vue'
 import UserMenu from '../../components/layout/UserMenu.vue'
+import NotificationsMenu from '../../components/layout/NotificationsMenu.vue'
+import type { NotificationItem } from '../../types/notifications'
 
 const lastAccountAction = ref('')
+
+const demoNotifications: NotificationItem[] = [
+  { id: 'n1', title: 'Invoice paid', body: 'Talbot & Rowe · ₹ 9,80,000', time: '2h ago', icon: 'receipt', tone: 'success', unread: true },
+  { id: 'n2', title: 'New comment', body: 'Elena Marsh on "The case for oklch"', time: '5h ago', icon: 'message-square', tone: 'accent', unread: true },
+  { id: 'n3', title: 'Deal stalled', body: 'Kestrel Health, 21 days', time: '2d ago', icon: 'alert-triangle', tone: 'warn' },
+]
 
 const tab = ref('general')
 const tabs = [
@@ -80,6 +88,10 @@ const tabs = [
           selected: <span class="font-mono">{{ lastAccountAction }}</span>
         </span>
       </div>
+    </KitBlock>
+
+    <KitBlock label="Notifications">
+      <NotificationsMenu :items="demoNotifications" />
     </KitBlock>
 
     <KitBlock label="Tooltip">

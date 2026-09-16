@@ -18,6 +18,7 @@ import BottomNav from '../components/layout/BottomNav.vue'
 import { useFocusTrap } from '../composables/useFocusTrap'
 import { useSidebar } from '../composables/useSidebar'
 import type { BottomNavItem, NavSchema, UserMenuItem } from '../types/nav'
+import type { NotificationItem } from '../types/notifications'
 
 const props = withDefaults(
   defineProps<{
@@ -32,7 +33,9 @@ const props = withDefaults(
     userEmail?: string
     /** Account-menu entries. Omitted means Settings + Sign out. */
     userMenuItems?: UserMenuItem[]
+    /** Unread badge. Omitted, it is counted from `notifications`. */
     notificationCount?: number
+    notifications?: NotificationItem[]
   }>(),
   {},
 )
@@ -42,6 +45,9 @@ const emit = defineEmits<{
   search: [q: string]
   openTweaks: []
   userMenuSelect: [id: string]
+  notificationSelect: [id: string]
+  notificationsMarkAllRead: []
+  notificationsViewAll: []
 }>()
 
 const { collapsed, drawerOpen, closeDrawer } = useSidebar()
@@ -79,8 +85,6 @@ useFocusTrap(drawerOpen, drawerEl)
         :product-name="productName"
         :product-tag="productTag"
         :version="version"
-        :user-name="userName"
-        :user-email="userEmail"
         @navigate="emit('navigate', $event)"
       >
         <template v-if="$slots.brand" #brand><slot name="brand" /></template>
@@ -118,8 +122,6 @@ useFocusTrap(drawerOpen, drawerEl)
           :product-name="productName"
           :product-tag="productTag"
           :version="version"
-          :user-name="userName"
-          :user-email="userEmail"
           @navigate="emit('navigate', $event)"
           @close="closeDrawer()"
         >
@@ -141,9 +143,13 @@ useFocusTrap(drawerOpen, drawerEl)
         :user-email="userEmail"
         :user-menu-items="userMenuItems"
         :notification-count="notificationCount"
+        :notifications="notifications"
         @search="emit('search', $event)"
         @open-tweaks="emit('openTweaks')"
         @user-menu-select="emit('userMenuSelect', $event)"
+        @notification-select="emit('notificationSelect', $event)"
+        @notifications-mark-all-read="emit('notificationsMarkAllRead')"
+        @notifications-view-all="emit('notificationsViewAll')"
       >
         <template #actions><slot name="topbar-actions" /></template>
       </AppTopbar>

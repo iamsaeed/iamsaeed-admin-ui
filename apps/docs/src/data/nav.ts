@@ -1,4 +1,4 @@
-import type { BottomNavItem, NavSchema } from '@iamsaeed/admin-ui'
+import type { NotificationItem, BottomNavItem, NavSchema } from '@iamsaeed/admin-ui'
 
 /**
  * Nav is data the app owns — the shell renders whatever it is handed.
@@ -105,4 +105,43 @@ export const BOTTOM_NAV: BottomNavItem[] = [
   { id: 'content.posts', label: 'Content', icon: 'file-text' },
   { id: 'kit.foundations', label: 'Kit', icon: 'sparkles' },
   { id: 'analytics', label: 'Stats', icon: 'bar-chart' },
+]
+
+/** Sample notifications, so the bell has something to show in the guide. */
+export const NOTIFICATIONS: NotificationItem[] = [
+  {
+    id: 'invoice-paid',
+    title: 'Invoice paid',
+    body: 'Talbot & Rowe settled INV-2041',
+    time: '2h ago',
+    icon: 'receipt',
+    tone: 'success',
+    unread: true,
+  },
+  {
+    id: 'new-comment',
+    title: 'New comment',
+    body: 'Elena Marsh on "The case for oklch"',
+    time: '5h ago',
+    icon: 'message-square',
+    tone: 'accent',
+    unread: true,
+  },
+  {
+    id: 'draft-scheduled',
+    title: 'Draft scheduled',
+    body: '"Designing for clarity" publishes Friday',
+    time: 'Yesterday',
+    icon: 'calendar',
+    tone: 'neutral',
+    unread: true,
+  },
+  {
+    id: 'storage',
+    title: 'Storage at 82%',
+    body: 'Media library is nearing its limit',
+    time: '3d ago',
+    icon: 'alert-triangle',
+    tone: 'warn',
+  },
 ]

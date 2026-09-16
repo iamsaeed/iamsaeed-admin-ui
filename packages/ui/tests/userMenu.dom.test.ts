@@ -126,6 +126,19 @@ describe('UserMenu', () => {
     expect(document.activeElement).toBe(trigger(w).element)
   })
 
+  it('still closes on Escape when focus has left the menu', async () => {
+    const w = mountMenu()
+    await trigger(w).trigger('click')
+    await w.vm.$nextTick()
+    ;(document.activeElement as HTMLElement)?.blur()
+
+    keyOn(document.body, 'Escape')
+    await w.vm.$nextTick()
+
+    expect(w.find('[role="menu"]').exists()).toBe(false)
+    expect(document.activeElement).toBe(trigger(w).element)
+  })
+
   it('closes on Tab without stealing focus back', async () => {
     const w = mountMenu()
     await trigger(w).trigger('click')

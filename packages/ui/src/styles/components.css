@@ -445,21 +445,39 @@
       clip-path: inset(50%);
       white-space: nowrap;
     }
+    /* A LIST ROW, not a transposed table.
+       One label/value pair per line turns a 4-column table into a 4-line
+       block: five deals became ~600px, and the column names were repeated
+       five times each. An app shows the identifying cell as a title on its
+       own line and lets the rest sit inline beneath it, wrapping only when
+       it must. Same cells, same roles, a third of the height. */
     .data-table-stack tbody tr {
-      display: grid;
-      gap: var(--lm-space-1);
-      padding: var(--lm-space-3) 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--lm-space-1) var(--lm-space-4);
+      padding: var(--lm-space-3) var(--lm-space-4);
       border-bottom: 1px solid var(--lm-border);
     }
     .data-table-stack tbody td {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--lm-space-4);
+      align-items: baseline;
+      gap: var(--lm-space-2);
       height: auto;
-      padding: var(--lm-space-1) var(--lm-space-4);
+      padding: 0;
       border: 0;
     }
+    /* The first cell identifies the row, so it takes the full line and drops
+       the redundant label — nobody needs "COMPANY: Meridian Logistics" when
+       it is the heading of the block. */
+    .data-table-stack tbody td:first-child {
+      flex: 1 0 100%;
+      margin-bottom: var(--lm-space-1);
+    }
+    .data-table-stack tbody td:first-child::before { content: none; }
+    /* Right-alignment is a column concept; inline there is nothing to align
+       against and it only adds a gap mid-line. */
+    .data-table-stack tbody td.num { text-align: left; }
     /* Visual-only column label. The accessible name comes from the real <th>
        above; this exists so sighted users get the same context. If a screen
        reader also announces it the result is a harmless duplicate, not a
@@ -853,26 +871,42 @@
   }
 
   /* Responsive card/tile grid — the single most repeated layout in an admin. */
+  /* Two columns on a phone, auto-fill from md.
+     `auto-fill` with a 15rem floor collapses to ONE column below ~31rem, so a
+     four-KPI row became four full-width blocks and pushed every other section
+     of a dashboard off-screen — 4.6 screens of scrolling before any content.
+     A phone shows KPIs two-up, which is what a native app does. */
   .grid-auto {
     display: grid;
-    gap: var(--lm-space-4);
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    gap: var(--lm-space-3);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 48rem) {
+    .grid-auto {
+      gap: var(--lm-space-4);
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    }
   }
 
   /* ==========================================================================
      DASHBOARD
      ========================================================================== */
 
-  .kpi { padding: var(--lm-card-p); }
+  .kpi { padding: var(--lm-space-4); }
+
+  @media (min-width: 48rem) {
+    .kpi { padding: var(--lm-card-p); }
+  }
   .kpi-label {
     font-size: 0.75rem;
     font-weight: 500;
     color: var(--lm-muted);
   }
   .kpi-value {
-    margin-top: var(--lm-space-2);
+    margin-top: var(--lm-space-1);
     font-family: var(--lm-font-display);
-    font-size: 1.75rem;
+    font-size: 1.375rem;
     font-weight: 650;
     letter-spacing: -0.025em;
     font-variant-numeric: tabular-nums;
@@ -888,6 +922,10 @@
     font-size: 0.6875rem;
     font-weight: 600;
   }
+  @media (min-width: 48rem) {
+    .kpi-value { margin-top: var(--lm-space-2); font-size: 1.75rem; }
+  }
+
   .kpi-delta-up   { background: var(--lm-success-soft); color: var(--lm-success); }
   .kpi-delta-down { background: var(--lm-danger-soft); color: var(--lm-danger); }
   .kpi-icon {

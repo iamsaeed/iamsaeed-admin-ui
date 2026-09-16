@@ -26,8 +26,6 @@ const props = withDefaults(
     productName?: string
     productTag?: string
     version?: string
-    userName?: string
-    userEmail?: string
   }>(),
   { variant: 'rail', productName: 'Lumen', productTag: 'Admin' },
 )
@@ -58,12 +56,17 @@ function onItemClick(id: string, hasChildren: boolean) {
   >
     <!-- Brand -->
     <div class="flex items-center gap-3 px-4 h-(--lm-topbar-h) shrink-0">
-      <div
-        class="grid place-items-center w-8 h-8 rounded-sm bg-accent text-on-accent shrink-0"
-        aria-hidden="true"
-      >
-        <Icon name="layers" :size="17" />
-      </div>
+      <!-- The brand mark is a slot so a consuming product can render its own
+           logo here. The default keeps the generic glyph, so a consumer that
+           passes nothing is unchanged. -->
+      <slot name="brand">
+        <div
+          class="grid place-items-center w-8 h-8 rounded-sm bg-accent text-on-accent shrink-0"
+          aria-hidden="true"
+        >
+          <Icon name="layers" :size="17" />
+        </div>
+      </slot>
       <div v-if="!isIconOnly" class="min-w-0 flex-1">
         <div class="font-display font-semibold text-[0.9375rem] leading-tight truncate">
           {{ productName }}
@@ -134,25 +137,17 @@ function onItemClick(id: string, hasChildren: boolean) {
       </template>
     </nav>
 
-    <!-- Account -->
-    <div class="border-t border-border p-2 shrink-0">
-      <button
-        type="button"
-        class="nav-item w-full"
-        :class="{ 'justify-center': isIconOnly }"
-        :title="isIconOnly ? userName : undefined"
-      >
-        <span class="avatar avatar-sm">{{ (userName || 'U').slice(0, 1).toUpperCase() }}</span>
-        <span v-if="!isIconOnly" class="min-w-0 flex-1 text-left">
-          <span class="block truncate text-fg font-medium">{{ userName || 'Account' }}</span>
-          <span v-if="userEmail" class="block truncate text-[0.6875rem] text-subtle">
-            {{ userEmail }}
-          </span>
-        </span>
-      </button>
-      <div v-if="version && !isIconOnly" class="px-3 pt-1 text-[0.625rem] text-subtle">
-        {{ version }}
-      </div>
+    <!-- Footer.
+         The account used to sit here as well as in the topbar. Two controls
+         for one thing is a question every user has to answer once ("are these
+         the same account?"), so the sidebar copy is gone and UserMenu in the
+         topbar is the single place an account is reached. What remains is the
+         build stamp, and the whole block disappears when there is none. -->
+    <div
+      v-if="version && !isIconOnly"
+      class="border-t border-border px-3 py-2 shrink-0 text-[0.625rem] text-subtle"
+    >
+      {{ version }}
     </div>
   </div>
 </template>

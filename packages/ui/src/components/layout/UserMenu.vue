@@ -2,26 +2,19 @@
 /**
  * The topbar account menu — avatar + name, opening a menu of account actions.
  *
- * It implements the WAI-ARIA **menu button** pattern, which is deliberately
- * NOT the modal pattern used by the drawer and the tweaks panel:
- *
- *   - the trigger carries `aria-haspopup="menu"` and `aria-expanded`
- *   - opening moves focus to the first item (last, if opened with ArrowUp)
- *   - Arrow keys, Home and End move a roving focus inside the menu
- *   - Escape closes and gives focus back to the trigger
- *   - Tab closes it and lets focus continue through the page
- *
- * A focus TRAP would be wrong here. A menu is not modal: the rest of the page
- * stays reachable, so trapping would contradict what the markup promises. The
- * `aria-modal` rule in CLAUDE.md applies to overlays that claim inertness -
- * this one does not claim it and must not have it.
+ * The keyboard contract lives in `useMenuButton`, shared with the other
+ * topbar menus: focus lands on the first item, arrows wrap, Escape closes and
+ * restores focus to the trigger, Tab closes without stealing it, a click
+ * outside dismisses. No focus trap and no `aria-modal` — a menu is not a
+ * dialog and must not claim the page behind it is inert.
  *
  * The items are DATA, like the sidebar nav. The library does not decide
  * whether an app has a profile page or a workspace switcher; it emits an id
  * and the app routes it.
  */
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import Icon from '../ui/Icon.vue'
+import { useMenuButton } from '../../composables/useMenuButton'
 import type { UserMenuItem } from '../../types/nav'
 
 const props = withDefaults(
@@ -44,101 +37,22 @@ const DEFAULT_ITEMS: UserMenuItem[] = [
 ]
 
 const entries = computed<UserMenuItem[]>(() => props.items ?? DEFAULT_ITEMS)
-
 const initial = computed(() => (props.userName || 'U').slice(0, 1).toUpperCase())
 
-const open = ref(false)
 const rootEl = ref<HTMLElement | null>(null)
-const triggerEl = ref<HTMLButtonElement | null>(null)
+const triggerEl = ref<HTMLElement | null>(null)
 const menuEl = ref<HTMLElement | null>(null)
 
-function itemButtons(): HTMLButtonElement[] {
-  return menuEl.value ? Array.from(menuEl.value.querySelectorAll('button')) : []
-}
-
-function focusItem(index: number) {
-  const buttons = itemButtons()
-  if (buttons.length === 0) return
-
-  // Wrap at both ends — a menu that stops dead at the last item makes a
-  // keyboard user reverse all the way back.
-  const wrapped = (index + buttons.length) % buttons.length
-  buttons[wrapped]?.focus()
-}
-
-function currentIndex(): number {
-  return itemButtons().indexOf(document.activeElement as HTMLButtonElement)
-}
-
-async function openMenu(focus: 'first' | 'last' = 'first') {
-  open.value = true
-  await nextTick()
-  focusItem(focus === 'first' ? 0 : itemButtons().length - 1)
-}
-
-function closeMenu(restoreFocus = true) {
-  if (!open.value) return
-  open.value = false
-  if (restoreFocus) triggerEl.value?.focus()
-}
-
-function onTriggerKeydown(event: KeyboardEvent) {
-  if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault()
-    void openMenu('first')
-    return
-  }
-
-  if (event.key === 'ArrowUp') {
-    event.preventDefault()
-    void openMenu('last')
-  }
-}
-
-function onMenuKeydown(event: KeyboardEvent) {
-  switch (event.key) {
-    case 'Escape':
-      event.preventDefault()
-      closeMenu()
-      break
-    case 'ArrowDown':
-      event.preventDefault()
-      focusItem(currentIndex() + 1)
-      break
-    case 'ArrowUp':
-      event.preventDefault()
-      focusItem(currentIndex() - 1)
-      break
-    case 'Home':
-      event.preventDefault()
-      focusItem(0)
-      break
-    case 'End':
-      event.preventDefault()
-      focusItem(itemButtons().length - 1)
-      break
-    case 'Tab':
-      // Close, but let the browser move focus onward as it normally would.
-      closeMenu(false)
-      break
-  }
-}
+const { open, closeMenu, toggle, onTriggerKeydown, onMenuKeydown, onMenuFocusOut } = useMenuButton({
+  root: rootEl,
+  trigger: triggerEl,
+  menu: menuEl,
+})
 
 function onSelect(id: string) {
   closeMenu()
   emit('select', id)
 }
-
-/* A click anywhere else dismisses it. Pointerdown rather than click so the
-   menu is gone before the next element reacts. */
-function onDocumentPointerDown(event: PointerEvent) {
-  if (!open.value) return
-  if (rootEl.value?.contains(event.target as Node)) return
-  closeMenu(false)
-}
-
-onMounted(() => document.addEventListener('pointerdown', onDocumentPointerDown))
-onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPointerDown))
 </script>
 
 <template>
@@ -150,7 +64,7 @@ onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPoin
       :aria-expanded="open"
       aria-haspopup="menu"
       :aria-label="userName ? `Account menu for ${userName}` : 'Account menu'"
-      @click="open ? closeMenu(false) : openMenu('first')"
+      @click="toggle()"
       @keydown="onTriggerKeydown"
     >
       <span class="avatar avatar-sm">{{ initial }}</span>
@@ -178,6 +92,7 @@ onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPoin
         role="menu"
         :aria-label="userName ? `${userName} account` : 'Account'"
         @keydown="onMenuKeydown"
+        @focusout="onMenuFocusOut"
       >
         <div v-if="userName || userEmail" class="px-3 py-2">
           <p v-if="userName" class="text-sm font-medium truncate">{{ userName }}</p>

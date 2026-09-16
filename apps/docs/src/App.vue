@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { AdminLayout, TweaksPanel, useSidebar } from '@iamsaeed/admin-ui'
-import { BOTTOM_NAV, DOCS_NAV } from './data/nav'
+import { BOTTOM_NAV, DOCS_NAV, NOTIFICATIONS } from './data/nav'
 
 const router = useRouter()
 const route = useRoute()
@@ -59,7 +59,7 @@ function onNavigate(id: string) {
       version="v0.1.0"
       user-name="Ahmad"
       user-email="ahmad@codewithus.com"
-      :notification-count="3"
+      :notifications="NOTIFICATIONS"
       @navigate="onNavigate"
       @open-tweaks="tweaksOpen = true"
     >

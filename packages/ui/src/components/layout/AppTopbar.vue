@@ -11,13 +11,17 @@ import { useSidebar } from '../../composables/useSidebar'
 import { useTheme } from '../../composables/useTheme'
 import Icon from '../ui/Icon.vue'
 import UserMenu from './UserMenu.vue'
+import NotificationsMenu from './NotificationsMenu.vue'
 import type { UserMenuItem } from '../../types/nav'
+import type { NotificationItem } from '../../types/notifications'
 
 withDefaults(
   defineProps<{
     title?: string
     searchPlaceholder?: string
+    /** Unread badge. Omitted, it is counted from `notifications`. */
     notificationCount?: number
+    notifications?: NotificationItem[]
     userName?: string
     userEmail?: string
     /** Account-menu entries. Omitted means Settings + Sign out. */
@@ -31,6 +35,9 @@ const emit = defineEmits<{
   search: [q: string]
   openTweaks: []
   userMenuSelect: [id: string]
+  notificationSelect: [id: string]
+  notificationsMarkAllRead: []
+  notificationsViewAll: []
 }>()
 
 const { collapsed, toggleCollapsed, openDrawer } = useSidebar()
@@ -121,14 +128,13 @@ const mobileSearchOpen = ref(false)
       <Icon :name="isDark ? 'sun' : 'moon'" :size="18" label="Change theme" />
     </button>
 
-    <button type="button" class="btn btn-ghost btn-icon relative">
-      <Icon name="bell" :size="18" label="Notifications" />
-      <span
-        v-if="notificationCount"
-        class="absolute top-1.5 right-1.5 dot bg-danger"
-        aria-hidden="true"
-      />
-    </button>
+    <NotificationsMenu
+      :items="notifications"
+      :count="notificationCount"
+      @select="emit('notificationSelect', $event)"
+      @mark-all-read="emit('notificationsMarkAllRead')"
+      @view-all="emit('notificationsViewAll')"
+    />
 
     <slot name="actions" />
 

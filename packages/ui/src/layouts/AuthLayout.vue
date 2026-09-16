@@ -28,12 +28,17 @@ withDefaults(
     <main class="flex flex-col justify-center px-5 py-10 sm:px-10 lg:px-16">
       <div class="w-full max-w-sm mx-auto">
         <div class="flex items-center gap-3 mb-8">
-          <div
-            class="grid place-items-center w-9 h-9 rounded-sm bg-accent text-on-accent"
-            aria-hidden="true"
-          >
-            <Icon name="layers" :size="18" />
-          </div>
+          <!-- Slot so a consuming product can render its own logo here. The
+               default keeps the generic glyph, so a consumer that passes
+               nothing is unchanged. -->
+          <slot name="brand">
+            <div
+              class="grid place-items-center w-9 h-9 rounded-sm bg-accent text-on-accent"
+              aria-hidden="true"
+            >
+              <Icon name="layers" :size="18" />
+            </div>
+          </slot>
           <div>
             <div class="font-display font-semibold leading-tight">{{ productName }}</div>
             <div class="text-[0.6875rem] text-subtle">{{ productTag }}</div>
