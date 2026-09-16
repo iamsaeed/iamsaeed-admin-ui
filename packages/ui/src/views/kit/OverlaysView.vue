@@ -1,11 +1,26 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import KitBlock from '../../components/kit/KitBlock.vue'
+import Dialog from '../../components/ui/Dialog.vue'
 import Icon from '../../components/ui/Icon.vue'
 
-const modal = ref(false)
-const sheet = ref(false)
+/*
+ * These were hand-rolled markup until `Dialog` existed — scrim, Teleport, handle, header, body and
+ * footer written out once per dialog, and neither of them trapped focus or closed on Escape while
+ * both claimed `aria-modal="true"`. They are the component now, which doubles as the proof that one
+ * component covers a form, a destructive confirm, and a question.
+ */
+const form = ref(false)
+const discard = ref(false)
+const reason = ref(false)
 const menuOpen = ref(false)
+
+const lastAnswer = ref('')
+
+function onReason(value: string) {
+  lastAnswer.value = value
+  reason.value = false
+}
 </script>
 
 <template>
@@ -14,15 +29,21 @@ const menuOpen = ref(false)
       <h1 class="page-title">Overlays</h1>
       <p class="page-sub">
         Every overlay sits above the scrim by token (<code class="font-mono">--lm-z-*</code>), so nothing
-        needs a hand-picked z-index.
+        needs a hand-picked z-index. <code class="font-mono">Dialog</code> brings the focus trap and the
+        Escape handler with it, so no screen has to remember them.
       </p>
     </div>
   </div>
 
   <div class="card card-p">
     <KitBlock label="Dialog">
-      <button class="btn btn-primary" @click="modal = true">Open dialog</button>
-      <button class="btn btn-secondary" @click="sheet = true">Open confirm</button>
+      <button class="btn btn-primary" @click="form = true">Form</button>
+      <button class="btn btn-secondary" @click="discard = true">Confirm</button>
+      <button class="btn btn-secondary" @click="reason = true">Ask a question</button>
+    </KitBlock>
+
+    <KitBlock v-if="lastAnswer" label="Last answer">
+      <p class="text-sm text-muted">{{ lastAnswer }}</p>
     </KitBlock>
 
     <KitBlock label="Dropdown menu">
@@ -57,36 +78,51 @@ const menuOpen = ref(false)
     </KitBlock>
   </div>
 
-  <Teleport to="body">
-    <div v-if="modal" class="scrim" @click="modal = false" />
-    <div v-if="modal" class="modal" role="dialog" aria-modal="true" aria-label="Invite people">
-      <div class="modal-handle" />
-      <div class="modal-hd"><div class="card-title">Invite people</div><div class="card-sub">They'll get an email with a join link.</div></div>
-      <div class="modal-body flex flex-col gap-4">
-        <div class="form-group">
-          <label class="form-label" for="ov-email">Email addresses</label>
-          <textarea id="ov-email" class="form-textarea" placeholder="one@example.com, two@example.com" />
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="ov-role">Role</label>
-          <select id="ov-role" class="form-select"><option>Editor</option><option>Author</option><option>Viewer</option></select>
-        </div>
-      </div>
-      <div class="modal-ft">
-        <button class="btn btn-secondary" @click="modal = false">Cancel</button>
-        <button class="btn btn-primary" @click="modal = false">Send invites</button>
-      </div>
+  <!-- A form: the content is the default slot, the footer is the component's. -->
+  <Dialog
+    :open="form"
+    title="Invite people"
+    description="They'll get an email with a join link."
+    confirm-label="Send invites"
+    @confirm="form = false"
+    @close="form = false"
+  >
+    <div class="form-group">
+      <label class="form-label" for="ov-email">Email addresses</label>
+      <textarea id="ov-email" class="form-textarea" placeholder="one@example.com, two@example.com" />
     </div>
+    <div class="form-group">
+      <label class="form-label" for="ov-role">Role</label>
+      <select id="ov-role" class="form-select"><option>Editor</option><option>Author</option><option>Viewer</option></select>
+    </div>
+  </Dialog>
 
-    <div v-if="sheet" class="scrim" @click="sheet = false" />
-    <div v-if="sheet" class="modal" role="alertdialog" aria-modal="true" aria-label="Discard changes">
-      <div class="modal-handle" />
-      <div class="modal-hd"><div class="card-title">Discard changes?</div></div>
-      <div class="modal-body"><p class="text-muted">Your edits since the last save will be lost.</p></div>
-      <div class="modal-ft">
-        <button class="btn btn-secondary" @click="sheet = false">Keep editing</button>
-        <button class="btn btn-danger" @click="sheet = false">Discard</button>
-      </div>
-    </div>
-  </Teleport>
+  <!-- Destructive: announced as an alertdialog, and only the confirming button carries the weight. -->
+  <Dialog
+    :open="discard"
+    mode="confirm"
+    tone="danger"
+    title="Discard changes?"
+    cancel-label="Keep editing"
+    confirm-label="Discard"
+    @confirm="discard = false"
+    @close="discard = false"
+  >
+    <p class="text-muted">Your edits since the last save will be lost.</p>
+  </Dialog>
+
+  <!-- A question, in place of window.prompt. -->
+  <Dialog
+    :open="reason"
+    mode="prompt"
+    title="Why are you signing in as them?"
+    description="You will be signed in as them until you come back."
+    label="Reason"
+    hint="This is written to the activity log, with your name and the time."
+    confirm-label="Sign in as them"
+    :min-length="5"
+    multiline
+    @confirm="onReason"
+    @close="reason = false"
+  />
 </template>
