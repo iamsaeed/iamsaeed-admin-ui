@@ -18,12 +18,15 @@ const items = ref([
 <template>
   <SettingsLayout active="settings.integrations" title="Integrations" subtitle="Connect the tools your team already uses."
                   @navigate="emit('navigate', $event)">
-    <div class="grid-auto">
+    <!-- Not .grid-auto: that is two-up on phones (sized for KPI tiles), and a
+         card holding a name, a badge, a description and a switch squeezed into
+         half a phone clipped the name and ran the switch over the badge. -->
+    <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
       <div v-for="i in items" :key="i.id" class="card card-p">
         <div class="flex items-start gap-3">
           <span class="kpi-icon shrink-0"><Icon :name="i.icon" :size="16" /></span>
           <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
               <span class="card-title">{{ i.name }}</span>
               <span v-if="i.on" class="badge badge-success">Connected</span>
             </div>
