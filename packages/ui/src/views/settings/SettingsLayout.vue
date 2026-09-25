@@ -7,16 +7,14 @@
  * already-narrow viewport would leave no room for the form.
  */
 import Icon from '../../components/ui/Icon.vue'
+import { useSettingsSections } from '../../composables/useSettingsSections'
 
 defineProps<{ active: string; title: string; subtitle?: string }>()
 const emit = defineEmits<{ navigate: [id: string] }>()
 
-const sections = [
-  { id: 'settings.general', label: 'General', icon: 'settings' },
-  { id: 'settings.appearance', label: 'Appearance', icon: 'sparkles' },
-  { id: 'settings.integrations', label: 'Integrations', icon: 'plug' },
-  { id: 'settings.billing', label: 'Billing', icon: 'credit-card' },
-]
+// Defaults to General/Appearance/Integrations/Billing; a consumer can replace
+// the list with setSettingsSections() to add its own pages.
+const { sections } = useSettingsSections()
 </script>
 
 <template>

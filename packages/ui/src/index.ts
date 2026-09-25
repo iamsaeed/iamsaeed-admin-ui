@@ -34,6 +34,8 @@ export { useTheme } from './composables/useTheme'
 export { useSidebar } from './composables/useSidebar'
 export { useFocusTrap } from './composables/useFocusTrap'
 export { useMenuButton } from './composables/useMenuButton'
+export { useSettingsSections, DEFAULT_SETTINGS_SECTIONS } from './composables/useSettingsSections'
+export type { SettingsSection } from './composables/useSettingsSections'
 export type { FocusTrapOptions } from './composables/useFocusTrap'
 export { maxChromaForHue, oklchToRgb, contrastRatio, isInGamut } from './theme/oklch'
 export {

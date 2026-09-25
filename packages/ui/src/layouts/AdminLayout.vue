@@ -72,9 +72,11 @@ useFocusTrap(drawerOpen, drawerEl)
   <div class="min-h-dvh bg-bg text-fg">
     <a href="#lm-main" class="skip-link">Skip to content</a>
 
-    <!-- Desktop rail -->
+    <!-- Desktop rail. Sticky layer, not drawer: the rail is permanent chrome
+         like the topbar, so a modal's scrim (35) must cover it. On the drawer
+         layer (40) it stayed bright and clickable behind an open dialog. -->
     <aside
-      class="hidden lg:block fixed inset-y-0 left-0 z-(--lm-z-drawer)
+      class="hidden lg:block fixed inset-y-0 left-0 z-(--lm-z-sticky)
              transition-[width] duration-(--lm-dur) ease-(--lm-ease)"
       :style="{ width: collapsed ? 'var(--lm-sidebar-w-icon)' : 'var(--lm-sidebar-w)' }"
     >

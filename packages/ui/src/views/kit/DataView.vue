@@ -1,6 +1,11 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import Icon from '../../components/ui/Icon.vue'
 import KitBlock from '../../components/kit/KitBlock.vue'
+
+// Filter-chip demo: one selected value, toggled off by clicking it again.
+const region = ref<string | null>('Dubai')
+const toggleRegion = (r: string) => { region.value = region.value === r ? null : r }
 
 const rows = [
   { title: 'Designing for clarity', author: 'Marcus Tan', status: 'Published', views: '12,480', updated: '2h ago' },
@@ -94,6 +99,23 @@ const badgeFor = (s: string) =>
       <span class="badge badge-danger">Danger</span>
       <span class="badge badge-info">Info</span>
       <span class="badge badge-accent pill">Pill</span>
+    </KitBlock>
+
+    <KitBlock label="Filter chips">
+      <div class="toolbar !mb-0">
+        <button
+          v-for="r in ['Dubai', 'Sharjah', 'Ajman']"
+          :key="r"
+          class="chip"
+          :class="{ 'is-active': region === r }"
+          :aria-pressed="region === r"
+          @click="toggleRegion(r)"
+        >
+          {{ r }}
+        </button>
+        <span class="toolbar-sep" aria-hidden="true" />
+        <button class="chip" aria-pressed="false">Not contacted</button>
+      </div>
     </KitBlock>
 
     <KitBlock label="Chips & avatars">

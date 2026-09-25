@@ -36,6 +36,11 @@
     padding: var(--lm-card-p);
     border-bottom: 1px solid var(--lm-border);
   }
+  /* Header inside an already-padded card: pull it to the card edge, otherwise
+     it is indented twice and its divider stops short of both sides. */
+  .card-p > .card-hd {
+    margin: calc(-1 * var(--lm-card-p)) calc(-1 * var(--lm-card-p)) var(--lm-card-p);
+  }
 
   .card-title {
     font-family: var(--lm-font-display);
@@ -531,6 +536,25 @@
     color: var(--lm-fg);
   }
 
+  /* A chip used as a filter toggle (<button class="chip">). Without these it
+     looked identical whether or not it was applied — the selected tier or
+     region on a filter row was invisible. Selection reads `.is-active` like
+     .tab and .nav-item, or `aria-pressed`, which the toggle should carry. */
+  button.chip {
+    font: inherit;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color 150ms var(--lm-ease), border-color 150ms var(--lm-ease), color 150ms var(--lm-ease);
+  }
+  button.chip:hover { border-color: var(--lm-border-strong); }
+  .chip.is-active,
+  .chip[aria-pressed='true'] {
+    background: var(--lm-accent-soft);
+    border-color: var(--lm-accent);
+    color: var(--lm-accent);
+    font-weight: 600;
+  }
+
   .dot {
     width: 0.5rem;
     height: 0.5rem;
@@ -860,6 +884,13 @@
     gap: var(--lm-space-2);
     flex-wrap: wrap;
     margin-bottom: var(--lm-space-4);
+  }
+  /* Hairline between groups of controls in one toolbar (tiers | regions). */
+  .toolbar-sep {
+    align-self: stretch;
+    width: 1px;
+    margin-inline: var(--lm-space-1);
+    background: var(--lm-border);
   }
 
   .section-label {
