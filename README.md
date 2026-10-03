@@ -8,6 +8,17 @@ packages/ui     @iamsaeed/admin-ui  — the library
 apps/docs       living style guide — every component, in every axis
 ```
 
+## Documentation
+
+| Doc | For |
+|---|---|
+| [docs/INTEGRATION.md](docs/INTEGRATION.md) | Installing it in an app — prerequisites, per-host recipes (Vite, Laravel, Nuxt, CSS-only), troubleshooting |
+| [docs/FIRST-SCREEN.md](docs/FIRST-SCREEN.md) | A complete working screen to copy |
+| [docs/CLASSES.md](docs/CLASSES.md) | Every component class — **the API you will use most** |
+| [docs/COMPONENTS.md](docs/COMPONENTS.md) | Props, events and slots for every component and composable |
+| [AGENTS.md](AGENTS.md) | Consuming the package with an AI agent |
+| [CLAUDE.md](CLAUDE.md) | Working **on** the library itself |
+
 ## Quick start
 
 ```bash
@@ -18,9 +29,20 @@ npm run build               # library + docs
 
 ## Using it in an app
 
+Not on the public npm registry yet, and the repository is private — so pick one:
+
 ```bash
-npm install "file:../../themes/admin-panel/packages/ui"    # or a git URL
+# A. local path, when the app sits beside this repo
+npm install "file:../../themes/admin-panel/packages/ui"
+
+# B. tarball — the portable option today
+cd packages/ui && npm run build && npm pack     # → iamsaeed-admin-ui-0.4.0.tgz
+npm install /path/to/iamsaeed-admin-ui-0.4.0.tgz
 ```
+
+`npm install <git-url>` does **not** work: npm cannot install a subdirectory of a git repo, and
+this repo's root is a workspace container, not the package. Full detail and the Tailwind 4
+prerequisite: [docs/INTEGRATION.md](docs/INTEGRATION.md).
 
 ```css
 /* app.css — one import brings tokens, base styles and component classes */
@@ -109,7 +131,7 @@ and sets both.
 ## Accessibility is tested, not asserted
 
 ```bash
-npm test          # 480 assertions
+npm test          # 546 assertions
 ```
 
 The suite covers the palette, the colour maths, the focus trap and the theme composable.
@@ -199,9 +221,12 @@ loses their place every single time.
 | Shell | `AppSidebar`, `AppTopbar`, `BottomNav`, `TweaksPanel`, `UserMenu`, `NotificationsMenu` |
 | Composables | `useTheme`, `useSidebar`, `useBreakpoint`, `useIsDesktop`, `useIsTouch`, `useFocusTrap`, `useMenuButton` |
 | Primitives | `Dialog` — one overlay for a form, a confirm or a question, focus trap and Escape included |
-| Icons | 60 Lucide-style stroke icons, `currentColor` throughout |
+| Icons | 67 Lucide-style stroke icons, `currentColor` throughout |
 | Component classes | ~60 named classes — `.card` `.btn` `.form-*` `.data-table` `.badge` `.alert` `.modal` `.menu` `.nav-item` `.kpi` … |
 | Views | 34 ported screens under `@iamsaeed/admin-ui/views`, incl. a 12-page style guide |
+
+Full API for every row above: [docs/COMPONENTS.md](docs/COMPONENTS.md). Full class list:
+[docs/CLASSES.md](docs/CLASSES.md).
 
 Views are **starting points carrying demo data**, exported from a separate entry so an app that
 never imports one doesn't ship it.

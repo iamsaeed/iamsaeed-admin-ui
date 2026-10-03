@@ -24,7 +24,7 @@ npm run dev                 # style guide on http://127.0.0.1:5200
 npm run build               # library + docs
 npm run build:ui            # library only
 npm run type-check          # vue-tsc across both workspaces
-npm test --workspace=@iamsaeed/admin-ui   # 504 assertions (contrast, gamut, colour maths, focus trap, theme state)
+npm test --workspace=@iamsaeed/admin-ui   # 546 assertions (contrast, gamut, colour maths, focus trap, menus, dialogs, theme state)
 npm run test:a11y           # axe-core over the BUILT docs app: 35 routes x 3 themes x 2 viewports
 ```
 
