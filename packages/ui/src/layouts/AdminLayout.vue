@@ -36,8 +36,10 @@ const props = withDefaults(
     /** Unread badge. Omitted, it is counted from `notifications`. */
     notificationCount?: number
     notifications?: NotificationItem[]
+    /** Passed to the topbar: false hides its search box on every width. */
+    showSearch?: boolean
   }>(),
-  {},
+  { showSearch: true },
 )
 
 const emit = defineEmits<{
@@ -146,6 +148,7 @@ useFocusTrap(drawerOpen, drawerEl)
         :user-menu-items="userMenuItems"
         :notification-count="notificationCount"
         :notifications="notifications"
+        :show-search="showSearch"
         @search="emit('search', $event)"
         @open-tweaks="emit('openTweaks')"
         @user-menu-select="emit('userMenuSelect', $event)"

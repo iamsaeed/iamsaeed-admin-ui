@@ -29,6 +29,31 @@ export type {
   ThemeState,
 } from './theme/config'
 
+/* ── Dates ──────────────────────────────────────────────────────────────── */
+export {
+  isoDay,
+  toDate,
+  fromDate,
+  isIsoDay,
+  addDays,
+  addMonths,
+  spanDays,
+  startOfMonth,
+  endOfMonth,
+  todayIn,
+  monthMatrix,
+  fiscalYearStart,
+  defaultDatePresets,
+  matchPreset,
+  relativeRange,
+  dateOrderFor,
+  formatTyped,
+  parseTyped,
+  formatRangeLabel,
+  formatSpan,
+} from './utils/dateRange'
+export type { IsoDay, DateRange, DatePreset, RelativeUnit, DateOrder } from './utils/dateRange'
+
 /* ── Composables ────────────────────────────────────────────────────────── */
 export { useTheme } from './composables/useTheme'
 export { useSidebar } from './composables/useSidebar'
@@ -65,6 +90,7 @@ export { default as UserMenu } from './components/layout/UserMenu.vue'
 export { default as NotificationsMenu } from './components/layout/NotificationsMenu.vue'
 
 /* ── UI ─────────────────────────────────────────────────────────────────── */
+export { default as DateRangePicker } from './components/ui/DateRangePicker.vue'
 export { default as Dialog } from './components/ui/Dialog.vue'
 export { default as Icon } from './components/ui/Icon.vue'
 

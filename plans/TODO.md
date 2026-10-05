@@ -22,3 +22,9 @@ Tasks are added as `- [ ]` under the current date. Only the user checks items of
 - [ ] Decide whether `data-density` should be user-facing or dev-only in shipped products
 - [ ] RTL support (token architecture allows it; implementation deferred)
 - [x] First git commit + push — `iamsaeed/iamsaeed-admin-ui` (private, personal account), branch `main`
+
+## 2026-10-05
+
+- [ ] DateRangePicker component (presets incl. year/FY + relative, two-month calendar with month/year views, typed dates, validation, phone bottom sheet) — plans/2026-10-05-date-range-picker-plan.md
+- [ ] `AppTopbar` `showSearch` prop (SSB hides the search with a CSS rule today) — ship with the picker in 0.5.0
+- [ ] Adopt DateRangePicker in SSB Entries (replace the local DateRangeFilter, repack the vendored tarball)

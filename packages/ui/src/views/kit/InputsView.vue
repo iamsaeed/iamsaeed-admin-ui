@@ -2,8 +2,15 @@
 import { ref } from 'vue'
 import Icon from '../../components/ui/Icon.vue'
 import KitBlock from '../../components/kit/KitBlock.vue'
+import DateRangePicker from '../../components/ui/DateRangePicker.vue'
+import { addDays, todayIn } from '../../utils/dateRange'
 
 const on = ref(true)
+
+const today = todayIn()
+const range = ref({ from: addDays(today, -6), to: today })
+const open = ref({ from: '', to: '' })
+const capped = ref({ from: '', to: '' })
 </script>
 
 <template>
@@ -79,6 +86,23 @@ const on = ref(true)
           <label class="form-label" for="f6">Last name</label>
           <input id="f6" class="form-input" />
         </div>
+      </div>
+    </KitBlock>
+    <KitBlock label="Date range — presets, two months, month/year views, typed dates">
+      <div class="flex flex-col gap-2">
+        <DateRangePicker v-model:from="range.from" v-model:to="range.to" label="Decided" :max="today" shiftable />
+        <span class="text-xs text-muted">from={{ range.from || '∅' }} · to={{ range.to || '∅' }}</span>
+      </div>
+    </KitBlock>
+
+    <KitBlock label="Date range — empty, no presets, up to 31 days">
+      <DateRangePicker v-model:from="capped.from" v-model:to="capped.to" label="Period" :presets="[]" :max-days="31" :max="today" />
+    </KitBlock>
+
+    <KitBlock label="Date range — error and disabled">
+      <div class="flex flex-wrap gap-3">
+        <DateRangePicker v-model:from="open.from" v-model:to="open.to" label="Due" error="Choose the dates the report covers." required />
+        <DateRangePicker label="Locked" disabled />
       </div>
     </KitBlock>
   </div>

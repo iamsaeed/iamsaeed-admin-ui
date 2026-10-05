@@ -27,8 +27,13 @@ withDefaults(
     /** Account-menu entries. Omitted means Settings + Sign out. */
     userMenuItems?: UserMenuItem[]
     showThemeToggle?: boolean
+    /**
+     * Off for an app with nothing to search globally. A search box that does nothing — or only
+     * jumps to one list that already has its own — teaches people the controls are decorative.
+     */
+    showSearch?: boolean
   }>(),
-  { searchPlaceholder: 'Search…', showThemeToggle: true },
+  { searchPlaceholder: 'Search…', showThemeToggle: true, showSearch: true },
 )
 
 const emit = defineEmits<{
@@ -73,7 +78,7 @@ const mobileSearchOpen = ref(false)
     </h1>
 
     <!-- Desktop search -->
-    <div class="hidden lg:flex input-group max-w-md flex-1">
+    <div v-if="showSearch" class="hidden lg:flex input-group max-w-md flex-1">
       <span class="input-group-icon"><Icon name="search" :size="15" /></span>
       <input
         v-model="query"
@@ -85,7 +90,7 @@ const mobileSearchOpen = ref(false)
     </div>
 
     <!-- Mobile expanding search -->
-    <div v-if="mobileSearchOpen" class="lg:hidden input-group flex-1">
+    <div v-if="showSearch && mobileSearchOpen" class="lg:hidden input-group flex-1">
       <span class="input-group-icon"><Icon name="search" :size="15" /></span>
       <input
         v-model="query"
@@ -111,7 +116,7 @@ const mobileSearchOpen = ref(false)
     <div class="flex-1" />
 
     <button
-      v-if="!mobileSearchOpen"
+      v-if="showSearch && !mobileSearchOpen"
       type="button"
       class="btn btn-ghost btn-icon lg:hidden"
       @click="mobileSearchOpen = true"

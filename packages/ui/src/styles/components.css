@@ -1014,6 +1014,276 @@
     border: 0;
   }
 
+  /* ==========================================================================
+     DATE RANGE PICKER — trigger, panel, calendar, month/year views
+     --------------------------------------------------------------------------
+     Phone first: the panel is a `.modal` bottom sheet (that class does the
+     positioning) with one month, chips for presets and 44px days. From `md`
+     it is a popover under the trigger with a preset rail and two months.
+     ========================================================================== */
+
+  .daterange { position: relative; display: inline-flex; flex-direction: column; min-width: 0; }
+
+  .daterange-trigger {
+    display: inline-flex;
+    align-items: stretch;
+    min-height: var(--lm-control-h);
+    background: var(--lm-surface);
+    border: 1px solid var(--lm-border);
+    border-radius: var(--lm-radius-sm);
+    transition: border-color var(--lm-dur-fast) var(--lm-ease), box-shadow var(--lm-dur-fast) var(--lm-ease);
+  }
+  .daterange.is-open .daterange-trigger,
+  .daterange-trigger:focus-within { border-color: var(--lm-accent); box-shadow: 0 0 0 3px var(--lm-ring); }
+  .daterange.is-invalid .daterange-trigger { border-color: var(--lm-danger); }
+  .daterange-trigger.is-disabled { background: var(--lm-sunken); cursor: not-allowed; }
+
+  .daterange-button {
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    gap: var(--lm-space-2);
+    min-width: 0;
+    padding: 0 var(--lm-control-px);
+    border: 0;
+    background: transparent;
+    color: var(--lm-fg);
+    font-size: 1rem;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  @media (min-width: 40rem) { .daterange-button { font-size: 0.8125rem; } }
+  .daterange-button.is-empty { color: var(--lm-muted); }
+  .daterange-button:focus-visible { outline: none; }
+  .daterange-button:disabled { color: var(--lm-subtle); cursor: not-allowed; }
+  .daterange-value { overflow: hidden; text-overflow: ellipsis; }
+
+  .daterange-clear,
+  .daterange-shift {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2rem;
+    border: 0;
+    background: transparent;
+    color: var(--lm-muted);
+    cursor: pointer;
+  }
+  .daterange-shift:first-child { border-right: 1px solid var(--lm-border); border-radius: var(--lm-radius-sm) 0 0 var(--lm-radius-sm); }
+  .daterange-shift:last-child { border-left: 1px solid var(--lm-border); border-radius: 0 var(--lm-radius-sm) var(--lm-radius-sm) 0; }
+  .daterange-clear:hover,
+  .daterange-shift:hover:not(:disabled) { color: var(--lm-fg); background: var(--lm-sunken); }
+  .daterange-shift:disabled { opacity: 0.4; cursor: default; }
+
+  /* ── the panel ──────────────────────────────────────────────────────────── */
+
+  .daterange-panel { display: flex; flex-direction: column; }
+  .daterange-sheet { overflow-y: auto; }
+  .daterange-sheet-hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--lm-space-2) var(--lm-space-4) 0;
+  }
+
+  .daterange-popover {
+    position: absolute;
+    top: calc(100% + var(--lm-space-2));
+    z-index: var(--lm-z-dropdown);
+    flex-direction: row;
+    background: var(--lm-surface);
+    border: 1px solid var(--lm-border);
+    border-radius: var(--lm-radius);
+    box-shadow: var(--lm-shadow-lg);
+    overflow: hidden;
+  }
+  .daterange-popover.is-align-start { left: 0; }
+  .daterange-popover.is-align-end { right: 0; }
+
+  /* Presets: a chip row on the phone, a rail on desktop. */
+  .daterange-side { display: flex; flex-direction: column; gap: var(--lm-space-3); padding: var(--lm-space-3) var(--lm-space-4) 0; }
+  .daterange-presets { display: flex; gap: var(--lm-space-2); overflow-x: auto; scrollbar-width: none; }
+  .daterange-preset {
+    flex: none;
+    min-height: 2.5rem;
+    padding: 0 var(--lm-space-3);
+    border: 1px solid var(--lm-border);
+    border-radius: var(--lm-radius-pill);
+    background: transparent;
+    color: var(--lm-fg);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    text-align: left;
+    cursor: pointer;
+  }
+  .daterange-preset:hover { background: var(--lm-sunken); }
+  .daterange-preset[aria-selected='true'] {
+    border-color: var(--lm-accent);
+    background: var(--lm-accent-soft);
+    color: var(--lm-accent-hover);
+    font-weight: 600;
+  }
+
+  .daterange-relative { display: none; }
+  .daterange-relative-label { font-size: 0.75rem; color: var(--lm-muted); }
+  .daterange-relative-row { display: flex; gap: var(--lm-space-2); }
+  .daterange-relative-row .form-input,
+  .daterange-relative-row .form-select { min-height: 2rem; }
+  .daterange-relative-n { width: 3.5rem; flex: none; padding: 0 var(--lm-space-2); }
+
+  @media (min-width: 48rem) {
+    .daterange-side {
+      width: 11.5rem;
+      flex: none;
+      padding: var(--lm-space-2);
+      border-right: 1px solid var(--lm-border);
+    }
+    .daterange-presets { flex-direction: column; gap: 1px; overflow: visible; }
+    .daterange-preset {
+      min-height: 2rem;
+      padding: 0 var(--lm-space-3);
+      border: 0;
+      border-radius: var(--lm-radius-xs);
+      font-size: 0.8125rem;
+    }
+    .daterange-relative {
+      display: flex;
+      flex-direction: column;
+      gap: var(--lm-space-2);
+      padding-top: var(--lm-space-3);
+      border-top: 1px solid var(--lm-border);
+    }
+  }
+
+  .daterange-main { display: flex; flex-direction: column; min-width: 0; }
+
+  /* ── calendar ───────────────────────────────────────────────────────────── */
+
+  .daterange-months { display: flex; gap: var(--lm-space-6); padding: var(--lm-space-3) var(--lm-space-4) var(--lm-space-2); }
+  .daterange-month { display: flex; flex-direction: column; gap: var(--lm-space-2); flex: 1; }
+  @media (min-width: 48rem) { .daterange-month { flex: none; width: 15.75rem; } }
+
+  .daterange-head { display: flex; align-items: center; justify-content: space-between; min-height: 2.75rem; }
+  @media (min-width: 48rem) { .daterange-head { min-height: 2rem; } }
+
+  .daterange-nav {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--lm-border);
+    border-radius: var(--lm-radius-sm);
+    background: transparent;
+    color: var(--lm-fg);
+    cursor: pointer;
+  }
+  @media (min-width: 48rem) { .daterange-nav { width: 2rem; height: 2rem; } }
+  .daterange-nav:hover:not(:disabled) { background: var(--lm-sunken); }
+  .daterange-nav:disabled { opacity: 0.35; cursor: default; }
+  .daterange-nav.is-hidden { visibility: hidden; }
+
+  .daterange-title {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--lm-space-1);
+    min-height: 2.75rem;
+    padding: 0 var(--lm-space-2);
+    border: 0;
+    border-radius: var(--lm-radius-xs);
+    background: transparent;
+    color: var(--lm-fg);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  @media (min-width: 48rem) { .daterange-title { min-height: 2rem; font-size: 0.875rem; } }
+  .daterange-title:hover { background: var(--lm-sunken); }
+  .daterange-title.is-static { cursor: default; }
+  .daterange-title.is-static:hover { background: transparent; }
+
+  .daterange-grid { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .daterange-weekday { height: 1.75rem; font-size: 0.75rem; font-weight: 500; color: var(--lm-muted); text-align: center; }
+
+  /* The cell carries the range BAND; the button inside it carries the endpoint and today marks.
+     Splitting them is what lets the band run edge to edge while the endpoints stay rounded. */
+  .daterange-cell { height: 2.75rem; padding: 0; text-align: center; }
+  @media (min-width: 48rem) { .daterange-cell { height: 2.25rem; } }
+  .daterange-cell.is-in-range { background: var(--lm-accent-soft); }
+  .daterange-cell.is-start { background: linear-gradient(to right, transparent 50%, var(--lm-accent-soft) 50%); }
+  .daterange-cell.is-end { background: linear-gradient(to left, transparent 50%, var(--lm-accent-soft) 50%); }
+
+  .daterange-day {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: var(--lm-radius-sm);
+    background: transparent;
+    color: var(--lm-fg);
+    font-size: 0.9375rem;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  @media (min-width: 48rem) { .daterange-day { width: 2.25rem; height: 2.25rem; font-size: 0.8125rem; } }
+  .daterange-day:hover:not(:disabled):not(.is-endpoint) { background: var(--lm-sunken); }
+  .daterange-day.is-today { box-shadow: inset 0 0 0 1.5px var(--lm-accent); font-weight: 600; }
+  .daterange-day.is-endpoint { background: var(--lm-accent); color: var(--lm-on-accent); font-weight: 600; box-shadow: none; }
+  .daterange-day:focus-visible { outline: 2px solid var(--lm-accent); outline-offset: 2px; }
+  .daterange-day:disabled { color: var(--lm-subtle); cursor: default; }
+
+  /* ── month and year views ───────────────────────────────────────────────── */
+
+  .daterange-picker { display: flex; flex-direction: column; gap: var(--lm-space-3); padding: var(--lm-space-3) var(--lm-space-4); }
+  @media (min-width: 48rem) { .daterange-picker { width: 33.5rem; min-height: 17.5rem; box-sizing: border-box; } }
+  .daterange-picks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--lm-space-2); }
+  @media (min-width: 48rem) { .daterange-picks { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .daterange-pick {
+    min-height: 3rem;
+    border: 1px solid var(--lm-border);
+    border-radius: var(--lm-radius-sm);
+    background: transparent;
+    color: var(--lm-fg);
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .daterange-pick:hover:not(:disabled) { background: var(--lm-sunken); }
+  .daterange-pick.is-current { border-color: var(--lm-accent); }
+  .daterange-pick.is-in-range { background: var(--lm-accent-soft); color: var(--lm-accent-hover); font-weight: 600; }
+  .daterange-pick:disabled { color: var(--lm-subtle); cursor: default; }
+  .daterange-pick:focus-visible { outline: 2px solid var(--lm-accent); outline-offset: 2px; }
+
+  /* ── footer ─────────────────────────────────────────────────────────────── */
+
+  .daterange-footer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--lm-space-1);
+    margin-top: auto;
+    padding: var(--lm-space-3) var(--lm-space-4);
+    border-top: 1px solid var(--lm-border);
+  }
+  .daterange-footer-row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--lm-space-3); }
+  .daterange-fields { display: flex; align-items: flex-end; gap: var(--lm-space-2); min-width: 0; }
+  .daterange-fields-arrow { margin-bottom: 0.75rem; color: var(--lm-muted); flex: none; }
+  .daterange-field { display: flex; flex-direction: column; gap: var(--lm-space-1); min-width: 0; font-size: 0.75rem; color: var(--lm-muted); }
+  .daterange-field .form-input { width: 8.5rem; max-width: 100%; font-variant-numeric: tabular-nums; }
+  .daterange-actions { display: flex; gap: var(--lm-space-2); }
+  .daterange-note { margin: 0; font-size: 0.75rem; color: var(--lm-muted); }
+  .daterange-note.form-error { color: var(--lm-danger); }
+
+  /* Phone: the buttons span the sheet, Apply wider — the thumb's target. */
+  @media (max-width: 47.99rem) {
+    .daterange-actions { width: 100%; }
+    .daterange-actions .btn { flex: 1; min-height: 2.75rem; }
+    .daterange-actions .btn-primary { flex: 2; }
+    .daterange-fields { width: 100%; }
+    .daterange-field { flex: 1; }
+    .daterange-field .form-input { width: 100%; }
+  }
+
   /* Keyboard escape hatch out of the nav — first focusable element in the shell. */
   .skip-link {
     position: absolute;
