@@ -12,6 +12,8 @@ export default defineConfig({
       entry: {
         'admin-ui': fileURLToPath(new URL('./src/index.ts', import.meta.url)),
         views: fileURLToPath(new URL('./src/views.ts', import.meta.url)),
+        // The text editor ships its own engine, so it is opt-in like the views.
+        editor: fileURLToPath(new URL('./src/editor.ts', import.meta.url)),
       },
       formats: ['es'],
     },

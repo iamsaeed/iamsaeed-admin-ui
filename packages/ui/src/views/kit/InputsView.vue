@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import Icon from '../../components/ui/Icon.vue'
 import KitBlock from '../../components/kit/KitBlock.vue'
 import DateRangePicker from '../../components/ui/DateRangePicker.vue'
+import RichTextEditor from '../../components/editor/RichTextEditor.vue'
 import { addDays, todayIn } from '../../utils/dateRange'
 
 const on = ref(true)
@@ -11,6 +12,9 @@ const today = todayIn()
 const range = ref({ from: addDays(today, -6), to: today })
 const open = ref({ from: '', to: '' })
 const capped = ref({ from: '', to: '' })
+
+const message = ref('<h2>Spring cleaning offer</h2><p>Hi {{first_name}}, we look after buildings like {{building}}.</p><ul><li>Common areas</li><li>Windows</li></ul>')
+const editor = ref<InstanceType<typeof RichTextEditor> | null>(null)
 </script>
 
 <template>
@@ -97,6 +101,25 @@ const capped = ref({ from: '', to: '' })
 
     <KitBlock label="Date range — empty, no presets, up to 31 days">
       <DateRangePicker v-model:from="capped.from" v-model:to="capped.to" label="Period" :presets="[]" :max-days="31" :max="today" />
+    </KitBlock>
+
+    <KitBlock label="Rich text editor — Visual and HTML tabs, link, button, picture, merge fields">
+      <div class="flex flex-col gap-3 w-full">
+        <RichTextEditor ref="editor" v-model="message" label="Email message" placeholder="Write your message…" :min-height="10" />
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" class="chip" @click="editor?.insertText('{{first_name}}')">First name</button>
+          <button type="button" class="chip" @click="editor?.insertText('{{building}}')">Building</button>
+          <span class="text-xs text-muted">Chips call <code class="font-mono">insertText</code>; the value is plain HTML.</span>
+        </div>
+        <pre class="text-xs text-muted whitespace-pre-wrap">{{ message }}</pre>
+      </div>
+    </KitBlock>
+
+    <KitBlock label="Rich text editor — disabled, and without the HTML tab">
+      <div class="grid gap-3 md:grid-cols-2 w-full">
+        <RichTextEditor model-value="<p>Locked wording.</p>" label="Locked" disabled :min-height="6" />
+        <RichTextEditor model-value="<p>No HTML tab here.</p>" label="No raw HTML" :allow-html="false" :min-height="6" />
+      </div>
     </KitBlock>
 
     <KitBlock label="Date range — error and disabled">
