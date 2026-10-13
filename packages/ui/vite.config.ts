@@ -14,6 +14,8 @@ export default defineConfig({
         views: fileURLToPath(new URL('./src/views.ts', import.meta.url)),
         // The text editor ships its own engine, so it is opt-in like the views.
         editor: fileURLToPath(new URL('./src/editor.ts', import.meta.url)),
+        // The phone input carries libphonenumber's metadata, so it is opt-in too.
+        phone: fileURLToPath(new URL('./src/phone.ts', import.meta.url)),
       },
       formats: ['es'],
     },
