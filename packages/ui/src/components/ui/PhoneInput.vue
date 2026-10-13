@@ -16,7 +16,7 @@
  */
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, useTemplateRef, watch } from 'vue'
 import Icon from './Icon.vue'
-import { PHONE_COUNTRIES, phoneCountry, readTypedPhone, type PhoneCountry } from '../../utils/phone'
+import { phoneCountry, readTypedPhone, searchCountries, type PhoneCountry } from '../../utils/phone'
 
 type ListItem =
   | { type: 'heading'; label: string }
@@ -75,14 +75,7 @@ const flagClass = computed(() => (selected.value ? `fi fi-${selected.value.iso.t
 const calling = computed(() => (selected.value ? `+${selected.value.dialCode}` : ''))
 const isInvalid = computed(() => props.invalid || props.error !== '')
 
-const filtered = computed(() => {
-  const term = search.value.trim().toLowerCase()
-  if (!term) return PHONE_COUNTRIES
-  const dial = term.replace('+', '')
-  return PHONE_COUNTRIES.filter(
-    (country) => country.name.toLowerCase().includes(term) || country.iso.toLowerCase().includes(term) || country.dialCode.includes(dial),
-  )
-})
+const filtered = computed(() => searchCountries(search.value))
 
 const displayList = computed<ListItem[]>(() => {
   if (search.value.trim()) return filtered.value.map((country) => ({ type: 'country', country }))

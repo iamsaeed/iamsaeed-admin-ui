@@ -74,6 +74,23 @@ describe('PhoneInput', () => {
     expect(qa('.phone-option').length).toBeGreaterThan(200)
   })
 
+  it('shows the best match first: "India" lists India above the Indian Ocean territory, "+44" the UK first', async () => {
+    mountInput()
+    await openList()
+    const search = q<HTMLInputElement>('.phone-search-input')!
+    search.value = 'India'
+    search.dispatchEvent(new Event('input'))
+    await nextTick()
+    const india = qa('.phone-option-name').map((n) => n.textContent)
+    expect(india[0]).toBe('India')
+    expect(india.indexOf('British Indian Ocean Territory')).toBeGreaterThan(0)
+
+    search.value = '+44'
+    search.dispatchEvent(new Event('input'))
+    await nextTick()
+    expect(qa('.phone-option-name')[0]!.textContent).toBe('United Kingdom')
+  })
+
   it('filters by name, ISO code and calling code', async () => {
     mountInput()
     await openList()

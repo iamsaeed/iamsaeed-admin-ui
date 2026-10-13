@@ -10,4 +10,4 @@
  * Its own styles are in the main stylesheet (`@iamsaeed/admin-ui/styles`), which you already import.
  */
 export { default as PhoneInput } from './components/ui/PhoneInput.vue'
-export { PHONE_COUNTRIES, phoneCountry, readTypedPhone, toE164, fromE164, type PhoneCountry } from './utils/phone'
+export { PHONE_COUNTRIES, phoneCountry, readTypedPhone, searchCountries, toE164, fromE164, type PhoneCountry } from './utils/phone'
