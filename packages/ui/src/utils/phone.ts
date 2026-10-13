@@ -30,6 +30,11 @@ export const PHONE_COUNTRIES: PhoneCountry[] = getCountries()
   .map((iso: CountryCode) => ({ iso, name: regionNames?.of(iso) ?? iso, dialCode: getCountryCallingCode(iso) }))
   .sort((a, b) => a.name.localeCompare(b.name))
 
+/** For calling codes shared by several countries, the one a person means first (+44 is the UK, not Jersey). */
+const MAIN_COUNTRY_FOR_DIAL_CODE: Record<string, string> = {
+  '1': 'US', '7': 'RU', '39': 'IT', '44': 'GB', '47': 'NO', '61': 'AU', '212': 'MA', '262': 'RE', '290': 'SH', '358': 'FI', '590': 'GP', '599': 'CW',
+}
+
 const BY_ISO = new Map(PHONE_COUNTRIES.map((country) => [country.iso, country]))
 
 export function phoneCountry(iso: string): PhoneCountry | undefined {
@@ -86,4 +91,49 @@ export function fromE164(value: string | null | undefined, fallbackIso: string):
     if (iso) return { iso, national: parsed.nationalNumber }
   }
   return { iso: fallbackIso, national: text }
+}
+
+
+/** Lower case with accents stripped, so "cote" finds "Côte d'Ivoire" and "curacao" finds "Curaçao". */
+function fold(value: string): string {
+  return value.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()
+}
+
+/**
+ * The countries that match what was typed, best match first.
+ *
+ * A name search ranks: the exact name or ISO code ("india", "us"), then names that start with it
+ * ("indo" -> Indonesia), then a word that starts with it ("ocean" -> British Indian Ocean Territory),
+ * then anything that merely contains it. A calling-code search ("91", "+44") ranks the exact code first,
+ * with the country people mean by a shared code ahead of the rest (+44 -> United Kingdom before Jersey).
+ * Inside one rank the order stays alphabetical, so the list never shuffles for no reason.
+ */
+export function searchCountries(query: string, countries: PhoneCountry[] = PHONE_COUNTRIES): PhoneCountry[] {
+  const term = fold(query.trim())
+  if (!term) return countries
+
+  const digits = term.replace(/\D/g, '')
+  const isDialSearch = /^\+?\d+$/.test(term)
+
+  const rank = (country: PhoneCountry): number => {
+    if (isDialSearch) {
+      if (country.dialCode === digits) return MAIN_COUNTRY_FOR_DIAL_CODE[digits] === country.iso ? 0 : 1
+      return country.dialCode.startsWith(digits) ? 2 : Number.POSITIVE_INFINITY
+    }
+
+    const name = fold(country.name)
+    const iso = country.iso.toLowerCase()
+    if (name === term || iso === term) return 0
+    if (name.startsWith(term)) return 1
+    if (name.split(/[^a-z0-9]+/).some((word) => word.startsWith(term))) return 2
+    if (name.includes(term) || iso.startsWith(term)) return 3
+
+    return Number.POSITIVE_INFINITY
+  }
+
+  return countries
+    .map((country, index) => ({ country, index, rank: rank(country) }))
+    .filter((entry) => Number.isFinite(entry.rank))
+    .sort((a, b) => a.rank - b.rank || a.index - b.index)
+    .map((entry) => entry.country)
 }
