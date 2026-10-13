@@ -1,0 +1,3 @@
+/* Country flags for PhoneInput. Separate from the main stylesheet so an app with no phone field
+   does not load ~250 flag sprites. Import once: `@iamsaeed/admin-ui/phone.css`. */
+@import 'flag-icons/css/flag-icons.min.css';

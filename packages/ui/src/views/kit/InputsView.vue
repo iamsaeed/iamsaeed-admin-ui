@@ -4,6 +4,8 @@ import Icon from '../../components/ui/Icon.vue'
 import KitBlock from '../../components/kit/KitBlock.vue'
 import DateRangePicker from '../../components/ui/DateRangePicker.vue'
 import RichTextEditor from '../../components/editor/RichTextEditor.vue'
+import PhoneInput from '../../components/ui/PhoneInput.vue'
+import { toE164 } from '../../utils/phone'
 import { addDays, todayIn } from '../../utils/dateRange'
 
 const on = ref(true)
@@ -12,6 +14,10 @@ const today = todayIn()
 const range = ref({ from: addDays(today, -6), to: today })
 const open = ref({ from: '', to: '' })
 const capped = ref({ from: '', to: '' })
+
+const phone = ref({ national: '9161459446', iso: 'IN' })
+const phoneFresh = ref({ national: '', iso: 'US' })
+const phoneBad = ref({ national: '123', iso: 'GB' })
 
 const message = ref('<h2>Spring cleaning offer</h2><p>Hi {{first_name}}, we look after buildings like {{building}}.</p><ul><li>Common areas</li><li>Windows</li></ul>')
 const editor = ref<InstanceType<typeof RichTextEditor> | null>(null)
@@ -119,6 +125,27 @@ const editor = ref<InstanceType<typeof RichTextEditor> | null>(null)
       <div class="grid gap-3 md:grid-cols-2 w-full">
         <RichTextEditor model-value="<p>Locked wording.</p>" label="Locked" disabled :min-height="6" />
         <RichTextEditor model-value="<p>No HTML tab here.</p>" label="No raw HTML" :allow-html="false" :min-height="6" />
+      </div>
+    </KitBlock>
+
+    <KitBlock label="Phone number — country list, search, type +91… to switch country">
+      <div class="grid gap-4 md:grid-cols-2">
+        <div>
+          <label class="form-label" for="kit-phone">Mobile</label>
+          <PhoneInput id="kit-phone" v-model="phone.national" v-model:country-code="phone.iso" />
+          <p class="form-hint">Stored as {{ toE164(phone.iso, phone.national) || 'nothing yet' }}</p>
+        </div>
+        <div>
+          <label class="form-label" for="kit-phone-2">Mobile — preferred countries</label>
+          <PhoneInput id="kit-phone-2" v-model="phoneFresh.national" v-model:country-code="phoneFresh.iso" :preferred-countries="['AE', 'SA', 'PK', 'IN']" />
+        </div>
+      </div>
+    </KitBlock>
+
+    <KitBlock label="Phone number — error and disabled">
+      <div class="grid gap-4 md:grid-cols-2">
+        <PhoneInput v-model="phoneBad.national" v-model:country-code="phoneBad.iso" label="Mobile" error="Enter a full mobile number." />
+        <PhoneInput model-value="9161459446" country-code="IN" label="Locked" disabled />
       </div>
     </KitBlock>
 
