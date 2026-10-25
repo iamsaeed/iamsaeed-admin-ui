@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import Icon from '../../components/ui/Icon.vue'
 import KitBlock from '../../components/kit/KitBlock.vue'
+import KanbanBoard from '../../components/ui/KanbanBoard.vue'
+import type { KanbanColumn, KanbanMove } from '../../types/kanban'
 
 // Filter-chip demo: one selected value, toggled off by clicking it again.
 const region = ref<string | null>('Dubai')
@@ -13,6 +15,22 @@ const rows = [
   { title: 'Shipping a design system', author: 'Priya N.', status: 'Published', views: '8,204', updated: '1d ago' },
   { title: 'Density without regret', author: 'Sam R.', status: 'Archived', views: '3,118', updated: '3d ago' },
 ]
+
+// Kanban demo: the page owns the data and applies each move the board asks for.
+type Card = { id: string; title: string; key: string }
+const board = ref<KanbanColumn<Card>[]>([
+  { id: 'todo', title: 'To do', items: [{ id: 'k1', key: 'ASK-1', title: 'Sign-in page' }, { id: 'k2', key: 'ASK-2', title: 'Password reset email' }] },
+  { id: 'doing', title: 'In progress', items: [{ id: 'k3', key: 'ASK-3', title: 'Billing settings' }] },
+  { id: 'review', title: 'In review', items: [] },
+  { id: 'done', title: 'Done', items: [{ id: 'k4', key: 'ASK-4', title: 'Project setup' }] },
+])
+function applyMove(m: KanbanMove) {
+  const from = board.value.find((c) => c.id === m.fromColumn)!
+  const to = board.value.find((c) => c.id === m.toColumn)!
+  const card = from.items.splice(from.items.findIndex((i) => i.id === m.itemId), 1)[0]
+  const at = m.beforeId ? to.items.findIndex((i) => i.id === m.beforeId) : to.items.length
+  to.items.splice(at < 0 ? to.items.length : at, 0, card)
+}
 
 const badgeFor = (s: string) =>
   s === 'Published' ? 'badge-success' : s === 'Draft' ? 'badge-warn' : 'badge-neutral'
@@ -135,4 +153,15 @@ const badgeFor = (s: string) =>
       <div class="w-full max-w-sm progress"><div class="progress-bar" style="width: 68%" /></div>
     </KitBlock>
   </div>
+
+  <KitBlock label="Kanban board — drag, Alt+arrows, or the Move menu on touch screens" />
+  <KanbanBoard :columns="board" label="Demo board" class="mb-8" @move="applyMove">
+    <template #card="{ item, column, moveTo }">
+      <div class="text-xs text-muted font-mono">{{ item.key }}</div>
+      <div class="text-sm font-medium">{{ item.title }}</div>
+      <select class="form-select mt-2 md:hidden" :aria-label="`Move ${item.key}`" :value="column.id" @change="moveTo(($event.target as HTMLSelectElement).value)">
+        <option v-for="c in board" :key="c.id" :value="c.id">{{ c.title }}</option>
+      </select>
+    </template>
+  </KanbanBoard>
 </template>

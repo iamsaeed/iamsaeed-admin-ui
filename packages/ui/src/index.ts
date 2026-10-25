@@ -93,6 +93,8 @@ export { default as NotificationsMenu } from './components/layout/NotificationsM
 export { default as DateRangePicker } from './components/ui/DateRangePicker.vue'
 export { default as Dialog } from './components/ui/Dialog.vue'
 export { default as Icon } from './components/ui/Icon.vue'
+export { default as KanbanBoard } from './components/ui/KanbanBoard.vue'
+export type { KanbanColumn, KanbanMove } from './types/kanban'
 
 /* ── Style-guide primitives ─────────────────────────────────────────────── */
 export { default as KitSection } from './components/kit/KitSection.vue'
