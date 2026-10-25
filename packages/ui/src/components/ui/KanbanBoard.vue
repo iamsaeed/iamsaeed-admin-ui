@@ -6,6 +6,9 @@
  *  - keyboard on a focused card: Alt+Left / Alt+Right to the neighbouring column, Alt+Up / Alt+Down to reorder;
  *  - the `card` slot's `moveTo(columnId)` helper, for a "Move to" control on touch screens, where native drag is absent.
  * Mobile-first: columns sit in a horizontal, snap-scrolling strip; from md they share the width.
+ *
+ * Links inside a card should carry `draggable="false"`: a browser drags a link by itself, so without it grabbing the
+ * card on its title drags the link and the board never sees a move.
  */
 import { ref } from 'vue'
 import type { KanbanColumn, KanbanMove } from '../../types/kanban'
