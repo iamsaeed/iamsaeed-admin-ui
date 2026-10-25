@@ -1,6 +1,6 @@
 {
   "name": "@iamsaeed/admin-ui",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "type": "module",
   "description": "Runtime-skinnable Vue 3 admin design system \u2014 tokens, shell, primitives, views",
   "files": [
