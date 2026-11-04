@@ -6,8 +6,8 @@
  * and a consumer adding a brand skin registers it here so both follow.
  */
 
-export const THEMES = ['light', 'dark', 'sepia'] as const
-export const SKINS = ['violet', 'indigo', 'blue', 'teal', 'green', 'amber', 'rose', 'slate'] as const
+export const THEMES = ['light', 'dark', 'sepia', 'paper'] as const
+export const SKINS = ['violet', 'indigo', 'blue', 'teal', 'green', 'amber', 'rose', 'slate', 'kriyx'] as const
 export const DENSITIES = ['compact', 'regular', 'comfy'] as const
 export const RADII = ['sharp', 'regular', 'round'] as const
 
@@ -52,6 +52,7 @@ export const SKIN_HUES: Record<Skin, number> = {
   amber: 75,
   rose: 20,
   slate: 265,
+  kriyx: 36,
 }
 
 /**
@@ -72,6 +73,7 @@ export const SKIN_CHROMA: Record<Skin, number> = {
   amber: 0.096,
   rose: 0.181,
   slate: 0.2,
+  kriyx: 0.155,
 }
 
 export const SKIN_LABELS: Record<Skin, string> = {
@@ -83,6 +85,7 @@ export const SKIN_LABELS: Record<Skin, string> = {
   amber: 'Amber',
   rose: 'Rose',
   slate: 'Slate',
+  kriyx: 'Kriyx',
 }
 
 export const STORAGE_KEY = 'lm-theme'

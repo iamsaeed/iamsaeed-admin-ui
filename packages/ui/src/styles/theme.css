@@ -106,6 +106,7 @@
    the selector each time. */
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 @custom-variant sepia (&:where([data-theme='sepia'], [data-theme='sepia'] *));
+@custom-variant paper (&:where([data-theme='paper'], [data-theme='paper'] *));
 
 /* Pointer-type variants. The reason a "compact" density can never ship a
    28px tap target on a phone — see base.css. */

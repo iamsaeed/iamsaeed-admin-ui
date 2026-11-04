@@ -169,7 +169,7 @@ describe('useTheme — persistence', () => {
 })
 
 describe('useTheme — toggles', () => {
-  it('cycles light → dark → sepia → light', async () => {
+  it('cycles light → dark → sepia → paper → light', async () => {
     const t = await freshUseTheme()
     t.setTheme('light')
     await nextTick()
@@ -178,6 +178,8 @@ describe('useTheme — toggles', () => {
     expect(t.resolvedTheme.value).toBe('dark')
     t.cycleTheme(); await nextTick()
     expect(t.resolvedTheme.value).toBe('sepia')
+    t.cycleTheme(); await nextTick()
+    expect(t.resolvedTheme.value).toBe('paper')
     t.cycleTheme(); await nextTick()
     expect(t.resolvedTheme.value).toBe('light')
   })

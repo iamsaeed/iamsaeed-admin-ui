@@ -54,3 +54,5 @@
    If you genuinely want a monochrome accent, drop `--lm-skin-c` toward 0.02
    rather than overriding lightness. */
 [data-skin='slate'] { --lm-accent-h: 265; --lm-skin-c: 0.2; }
+/* Kriyx orange (#E8552B). Its role is the brand accent under the `paper` theme. */
+[data-skin='kriyx'] { --lm-accent-h: 36; --lm-skin-c: 0.155; --lm-brand-c: 0.19; --lm-brand-light-c: 0.136; }

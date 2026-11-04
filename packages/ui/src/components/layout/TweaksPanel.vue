@@ -47,6 +47,7 @@ const themeOptions: { value: ThemePreference; label: string; icon: string }[] = 
   { value: 'light', label: 'Light', icon: 'sun' },
   { value: 'dark', label: 'Dark', icon: 'moon' },
   { value: 'sepia', label: 'Sepia', icon: 'archive' },
+  { value: 'paper', label: 'Paper', icon: 'file-text' },
 ]
 
 /*

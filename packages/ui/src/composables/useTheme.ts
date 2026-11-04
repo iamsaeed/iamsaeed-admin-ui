@@ -162,9 +162,9 @@ export function useTheme() {
       state.accentHue = hue == null ? null : Math.max(0, Math.min(360, Math.round(hue)))
     },
 
-    /** Cycle light → dark → sepia. What a topbar toggle button calls. */
+    /** Cycle paper → light → dark → sepia → paper. What a topbar toggle button calls. */
     cycleTheme: () => {
-      const order: ThemePreference[] = ['light', 'dark', 'sepia']
+      const order: ThemePreference[] = ['paper', 'light', 'dark', 'sepia']
       const current = resolveTheme(state.theme)
       state.theme = order[(order.indexOf(current) + 1) % order.length]!
     },

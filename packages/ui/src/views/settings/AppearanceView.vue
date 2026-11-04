@@ -16,6 +16,7 @@ const themes = [
   { value: 'light', label: 'Light', icon: 'sun' },
   { value: 'dark', label: 'Dark', icon: 'moon' },
   { value: 'sepia', label: 'Sepia', icon: 'archive' },
+  { value: 'paper', label: 'Paper', icon: 'file-text' },
 ] as const
 </script>
 
