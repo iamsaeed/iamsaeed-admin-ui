@@ -210,6 +210,10 @@
   --lm-btn-primary-hover-bg: var(--lm-accent-hover);
   --lm-btn-primary-hover-fg: var(--lm-on-accent);
   --lm-btn-secondary-border: var(--lm-border);
+  --lm-btn-secondary-bg: var(--lm-surface);
+  --lm-field-fs: 0.8125rem;
+  --lm-field-h: var(--lm-control-h);
+  --lm-field-focus-shadow: 0 0 0 3px var(--lm-ring);
 }
 
 /* ============================================================================
@@ -342,6 +346,11 @@
   --lm-btn-primary-hover-bg: var(--lm-brand);
   --lm-btn-primary-hover-fg: oklch(0.195 0.012 100);
   --lm-btn-secondary-border: var(--lm-fg);
+  --lm-btn-secondary-bg: transparent;
+  /* Fields as on the public site's forms: 15px text, about 44px tall, and focus is the ink border alone (no glow). */
+  --lm-field-fs: 0.9375rem;
+  --lm-field-h: 2.75rem;
+  --lm-field-focus-shadow: none;
 
   /* The skin colour as an accent for emphasis (italic words, markers, counters). */
   --lm-brand-l: 0.641;

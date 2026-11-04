@@ -115,6 +115,10 @@ describe.each(COMBOS)('$theme · $skin', ({ theme, skin }) => {
     expect(contrastRatio(c('--lm-muted'), c('--lm-field-bg'))).toBeGreaterThanOrEqual(AA_NORMAL)
   })
 
+  it('a focused field is visible without a glow: its border colour stands out from the field background', () => {
+    expect(contrastRatio(c('--lm-accent'), c('--lm-field-bg'))).toBeGreaterThanOrEqual(AA_NON_TEXT)
+  })
+
   it.skipIf(theme !== 'paper')('the secondary button outline is visible against the surface (paper outlines it in ink)', () => {
     expect(contrastRatio(c('--lm-btn-secondary-border'), c('--lm-surface'))).toBeGreaterThanOrEqual(AA_NON_TEXT)
   })

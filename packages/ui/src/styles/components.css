@@ -123,7 +123,7 @@
   .btn-primary:hover { background: var(--lm-btn-primary-hover-bg); color: var(--lm-btn-primary-hover-fg); }
 
   .btn-secondary {
-    background: var(--lm-surface);
+    background: var(--lm-btn-secondary-bg);
     border-color: var(--lm-btn-secondary-border);
     color: var(--lm-fg);
   }
@@ -289,7 +289,7 @@
   .form-select,
   .form-textarea {
     width: 100%;
-    min-height: var(--lm-control-h);
+    min-height: var(--lm-field-h);
     padding: 0 var(--lm-control-px);
     background: var(--lm-field-bg);
     border: 1px solid var(--lm-border);
@@ -302,7 +302,7 @@
                 box-shadow var(--lm-dur-fast) var(--lm-ease);
   }
   @media (min-width: 40rem) {
-    .form-input, .form-select, .form-textarea { font-size: 0.8125rem; }
+    .form-input, .form-select, .form-textarea { font-size: var(--lm-field-fs); }
   }
 
   .form-textarea { padding: var(--lm-space-3) var(--lm-control-px); min-height: 6rem; resize: vertical; line-height: 1.6; }
@@ -312,7 +312,7 @@
   .form-textarea:focus {
     outline: none;
     border-color: var(--lm-accent);
-    box-shadow: 0 0 0 3px var(--lm-ring);
+    box-shadow: var(--lm-field-focus-shadow);
   }
 
   .form-input[aria-invalid='true'],
