@@ -1503,6 +1503,7 @@
   }
   .kanban-card:hover { border-color: var(--lm-border-strong); }
   .kanban-card:focus-visible { outline: 2px solid var(--lm-accent); outline-offset: 2px; }
+  .kanban-card.is-openable { cursor: pointer; }
   .kanban-card.is-dragging { opacity: 0.5; }
   .kanban-card.is-drop-before { box-shadow: 0 -3px 0 var(--lm-accent); }
   .kanban-drop-end { height: 3px; border-radius: 2px; background: var(--lm-accent); }

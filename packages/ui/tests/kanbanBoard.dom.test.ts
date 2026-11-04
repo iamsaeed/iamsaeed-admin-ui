@@ -24,6 +24,46 @@ function mountBoard(props: Record<string, unknown> = {}) {
 
 const card = (w: ReturnType<typeof mountBoard>, id: string) => w.get(`[data-testid="kanban-card-${id}"]`)
 
+describe('KanbanBoard: opening a card', () => {
+  const openBoard = (props: Record<string, unknown> = {}) => mount(KanbanBoard, {
+    props: { columns: columns(), label: 'Board', openable: true, ...props },
+    slots: { card: `<template #card="{ item }"><span class="t">{{ item.id }}</span><a class="lnk" href="#">link</a><button class="ctl">x</button><span class="plain" data-kanban-ignore>y</span></template>` },
+  })
+
+  it('emits open when the card is clicked anywhere on it', async () => {
+    const w = openBoard()
+    await card(w, 'b').trigger('click')
+    await card(w, 'c').get('.t').trigger('click')
+    expect(w.emitted('open')).toEqual([['b'], ['c']])
+  })
+
+  it('does not open from a link, a button or an element marked data-kanban-ignore', async () => {
+    const w = openBoard()
+    await card(w, 'a').get('.lnk').trigger('click')
+    await card(w, 'a').get('.ctl').trigger('click')
+    await card(w, 'a').get('.plain').trigger('click')
+    expect(w.emitted('open')).toBeUndefined()
+  })
+
+  it('opens from Enter or Space on the focused card, and keeps Alt+arrow for moving', async () => {
+    const w = openBoard()
+    await card(w, 'a').trigger('keydown', { key: 'Enter' })
+    await card(w, 'a').trigger('keydown', { key: ' ' })
+    await card(w, 'a').trigger('keydown', { key: 'ArrowRight', altKey: true })
+    expect(w.emitted('open')).toEqual([['a'], ['a']])
+    expect(w.emitted('move')).toHaveLength(1)
+  })
+
+  it('marks cards as openable only when asked, and emits nothing otherwise', async () => {
+    const plain = mountBoard()
+    await card(plain, 'a').trigger('click')
+    await card(plain, 'a').trigger('keydown', { key: 'Enter' })
+    expect(plain.emitted('open')).toBeUndefined()
+    expect(card(plain, 'a').classes()).not.toContain('is-openable')
+    expect(card(openBoard(), 'a').classes()).toContain('is-openable')
+  })
+})
+
 describe('KanbanBoard', () => {
   it('renders each column with its cards and count, and names the board', () => {
     const w = mountBoard()

@@ -7,6 +7,10 @@
  *  - the `card` slot's `moveTo(columnId)` helper, for a "Move to" control on touch screens, where native drag is absent.
  * Mobile-first: columns sit in a horizontal, snap-scrolling strip; from md they share the width.
  *
+ * Opening: set `openable` and listen for `open`. It fires when a card is clicked anywhere (or Enter/Space is pressed on the focused
+ * card), except on a link, button, field or anything marked `data-kanban-ignore`, so a card can hold its own controls. A drag never
+ * counts as a click. Without `openable` the board behaves exactly as before.
+ *
  * Links inside a card should carry `draggable="false"`: a browser drags a link by itself, so without it grabbing the
  * card on its title drags the link and the board never sees a move.
  */
@@ -21,10 +25,12 @@ const props = withDefaults(defineProps<{
   emptyText?: string
   /** Disables every way of moving (read-only board). */
   readonly?: boolean
+  /** Cards open when clicked: shows a pointer cursor and emits `open`. */
+  openable?: boolean
   testid?: string
-}>(), { emptyText: 'Nothing here', readonly: false, testid: 'kanban' })
+}>(), { emptyText: 'Nothing here', readonly: false, openable: false, testid: 'kanban' })
 
-const emit = defineEmits<{ move: [move: KanbanMove] }>()
+const emit = defineEmits<{ move: [move: KanbanMove]; open: [itemId: string] }>()
 
 const dragging = ref<{ id: string; from: string } | null>(null)
 const over = ref<{ column: string; beforeId: string | null } | null>(null)
@@ -92,7 +98,19 @@ function onDragEnd() {
 }
 
 /* ── keyboard ──────────────────────────────────────────────────────────── */
+const INTERACTIVE = 'a, button, input, select, textarea, label, summary, [role="button"], [contenteditable="true"], [data-kanban-ignore]'
+function onCardClick(e: MouseEvent, item: T) {
+  if (!props.openable || e.defaultPrevented) return
+  if ((e.target as HTMLElement | null)?.closest(INTERACTIVE)) return
+  emit('open', item.id)
+}
+
 function onKey(e: KeyboardEvent, item: T, column: KanbanColumn<T>) {
+  if (props.openable && !e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'Enter' || e.key === ' ') && e.target === e.currentTarget) {
+    e.preventDefault()
+    emit('open', item.id)
+    return
+  }
   if (!e.altKey || props.readonly) return
   const ci = props.columns.findIndex((c) => c.id === column.id)
   const ii = column.items.findIndex((i) => i.id === item.id)
@@ -127,7 +145,7 @@ function onKey(e: KeyboardEvent, item: T, column: KanbanColumn<T>) {
           v-for="item in column.items"
           :key="item.id"
           class="kanban-card"
-          :class="{ 'is-dragging': dragging?.id === item.id, 'is-drop-before': over?.column === column.id && over.beforeId === item.id }"
+          :class="{ 'is-dragging': dragging?.id === item.id, 'is-drop-before': over?.column === column.id && over.beforeId === item.id, 'is-openable': openable }"
           :draggable="!readonly"
           tabindex="0"
           :aria-roledescription="readonly ? undefined : 'Movable card'"
@@ -136,6 +154,7 @@ function onKey(e: KeyboardEvent, item: T, column: KanbanColumn<T>) {
           @dragstart="onDragStart($event, item, column)"
           @dragover="onDragOverCard($event, column, item)"
           @dragend="onDragEnd"
+          @click="onCardClick($event, item)"
           @keydown="onKey($event, item, column)"
         >
           <slot name="card" :item="item" :column="column" :move-to="(to: string) => moveTo(item.id, to)" />
