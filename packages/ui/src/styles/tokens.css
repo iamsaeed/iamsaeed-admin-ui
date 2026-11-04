@@ -192,10 +192,24 @@
   --lm-on-accent: oklch(var(--lm-on-accent-l) var(--lm-on-accent-c) var(--lm-accent-h));
   --lm-ring: oklch(var(--lm-accent-l) var(--lm-accent-c) var(--lm-accent-h) / var(--lm-ring-a));
   --lm-c1: oklch(var(--lm-accent-l) var(--lm-accent-c) var(--lm-accent-h));
-  /* Brand: the skin's colour at its own vividness (a skin may set --lm-brand-c above its accent-safe --lm-skin-c), independent of the accent role (which a theme may make colourless). Falls back to the accent
-     lightness in every theme that does not set --lm-brand-l. `brand-light` is the same colour lifted for use on a dark panel (a skin sets --lm-brand-light-c; others get a muted default). */
-  --lm-brand: oklch(var(--lm-brand-l, var(--lm-accent-l)) var(--lm-brand-c, var(--lm-skin-c)) var(--lm-accent-h));
-  --lm-brand-light: oklch(0.735 var(--lm-brand-light-c, 0.1) var(--lm-accent-h));
+  /* Brand: the skin's colour at its own vividness (a skin may set --lm-brand-c above its accent-safe --lm-skin-c), independent of the accent role (which a theme may make colourless). Lightness follows the accent
+     and chroma follows the skin unless a theme or skin sets --lm-brand-l / --lm-brand-c. `brand-light` is the same colour lifted for use on a dark panel (a skin sets --lm-brand-light-c; others get a muted default). */
+  --lm-brand-l: var(--lm-accent-l);
+  --lm-brand-c: var(--lm-skin-c);
+  --lm-brand-light-c: 0.1;
+  --lm-brand: oklch(var(--lm-brand-l) var(--lm-brand-c) var(--lm-accent-h));
+  --lm-brand-light: oklch(0.735 var(--lm-brand-light-c) var(--lm-accent-h));
+
+  /* Control shape and finish. Defaults follow the radius axis and the accent, so every existing theme looks exactly as before; a theme (see `paper`)
+     overrides them to restyle buttons, fields and cards without touching component CSS. Declared here, not in :root, so a nested [data-theme] +
+     [data-skin] region re-resolves them against its own surface and accent. */
+  --lm-btn-radius: var(--lm-radius-sm);
+  --lm-field-radius: var(--lm-radius-sm);
+  --lm-card-radius: var(--lm-radius);
+  --lm-field-bg: var(--lm-surface);
+  --lm-btn-primary-hover-bg: var(--lm-accent-hover);
+  --lm-btn-primary-hover-fg: var(--lm-on-accent);
+  --lm-btn-secondary-border: var(--lm-border);
 }
 
 /* ============================================================================
@@ -298,9 +312,10 @@
   --lm-neutral-h: 88;
   --lm-neutral-c: 0.014;
 
+  /* Page cream, cards and chrome (sidebar, top bar) a shade warmer-lighter than the page, fields pure white: the public site's layering. */
   --lm-bg: oklch(0.959 0.01 87);
-  --lm-surface: oklch(1 0 90);
-  --lm-surface-2: oklch(0.982 0.007 89);
+  --lm-surface: oklch(0.982 0.007 89);
+  --lm-surface-2: oklch(0.97 0.01 88);
   --lm-sunken: oklch(0.94 0.014 89);
 
   --lm-border: oklch(0.871 0.02 88);
@@ -316,7 +331,17 @@
   --lm-accent-soft-l: 0.94;   --lm-accent-soft-c: 0.012;
   --lm-accent-soft-2-l: 0.9;  --lm-accent-soft-2-c: 0.016;
   --lm-on-accent-l: 0.959;    --lm-on-accent-c: 0.01;
-  --lm-ring-a: 0.45;
+  --lm-ring-a: 0.2;
+
+  /* Shape and finish from the public site: pill buttons (every size), 4px fields on white, 6px cards, an ink outline on secondary buttons, and the
+     primary button turning brand-orange on hover with ink text. */
+  --lm-btn-radius: 999px;
+  --lm-field-radius: 4px;
+  --lm-card-radius: 6px;
+  --lm-field-bg: oklch(1 0 90);
+  --lm-btn-primary-hover-bg: var(--lm-brand);
+  --lm-btn-primary-hover-fg: oklch(0.195 0.012 100);
+  --lm-btn-secondary-border: var(--lm-fg);
 
   /* The skin colour as an accent for emphasis (italic words, markers, counters). */
   --lm-brand-l: 0.641;

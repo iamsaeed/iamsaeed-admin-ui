@@ -275,7 +275,7 @@ exports[`palette snapshot > paper 1`] = `
     "muted": "#5e5a4f",
     "on-accent": "#f5f1ea",
     "success": "#217145",
-    "surface": "#ffffff",
+    "surface": "#fbf9f4",
     "warn": "#885e19",
   },
   "blue": {
@@ -289,7 +289,7 @@ exports[`palette snapshot > paper 1`] = `
     "muted": "#5e5a4f",
     "on-accent": "#edf2f8",
     "success": "#217145",
-    "surface": "#ffffff",
+    "surface": "#fbf9f4",
     "warn": "#885e19",
   },
   "green": {
@@ -303,7 +303,7 @@ exports[`palette snapshot > paper 1`] = `
     "muted": "#5e5a4f",
     "on-accent": "#ecf4ee",
     "success": "#217145",
-    "surface": "#ffffff",
+    "surface": "#fbf9f4",
     "warn": "#885e19",
   },
   "indigo": {
@@ -317,7 +317,7 @@ exports[`palette snapshot > paper 1`] = `
     "muted": "#5e5a4f",
     "on-accent": "#eff1f8",
     "success": "#217145",
-    "surface": "#ffffff",
+    "surface": "#fbf9f4",
     "warn": "#885e19",
   },
   "kriyx": {
@@ -331,7 +331,7 @@ exports[`palette snapshot > paper 1`] = `
     "muted": "#5e5a4f",
     "on-accent": "#f8efed",
     "success": "#217145",
-    "surface": "#ffffff",
+    "surface": "#fbf9f4",
     "warn": "#885e19",
   },
   "rose": {
@@ -345,7 +345,7 @@ exports[`palette snapshot > paper 1`] = `
     "muted": "#5e5a4f",
     "on-accent": "#f8efef",
     "success": "#217145",
-    "surface": "#ffffff",
+    "surface": "#fbf9f4",
     "warn": "#885e19",
   },
   "slate": {
@@ -359,7 +359,7 @@ exports[`palette snapshot > paper 1`] = `
     "muted": "#5e5a4f",
     "on-accent": "#eef1f8",
     "success": "#217145",
-    "surface": "#ffffff",
+    "surface": "#fbf9f4",
     "warn": "#885e19",
   },
   "teal": {
@@ -373,7 +373,7 @@ exports[`palette snapshot > paper 1`] = `
     "muted": "#5e5a4f",
     "on-accent": "#eaf4f3",
     "success": "#217145",
-    "surface": "#ffffff",
+    "surface": "#fbf9f4",
     "warn": "#885e19",
   },
   "violet": {
@@ -387,7 +387,7 @@ exports[`palette snapshot > paper 1`] = `
     "muted": "#5e5a4f",
     "on-accent": "#f1f0f8",
     "success": "#217145",
-    "surface": "#ffffff",
+    "surface": "#fbf9f4",
     "warn": "#885e19",
   },
 }

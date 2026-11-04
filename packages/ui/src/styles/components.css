@@ -22,7 +22,7 @@
   .card {
     background: var(--lm-surface);
     border: 1px solid var(--lm-border);
-    border-radius: var(--lm-radius);
+    border-radius: var(--lm-card-radius);
     box-shadow: var(--lm-shadow-xs);
   }
 
@@ -95,7 +95,7 @@
     height: var(--btn-h);
     padding-inline: var(--lm-control-px);
     border: 1px solid transparent;
-    border-radius: var(--lm-radius-sm);
+    border-radius: var(--lm-btn-radius);
     font-size: 0.8125rem;
     font-weight: 550;
     line-height: 1;
@@ -120,14 +120,14 @@
     background: var(--lm-accent);
     color: var(--lm-on-accent);
   }
-  .btn-primary:hover { background: var(--lm-accent-hover); color: var(--lm-on-accent); }
+  .btn-primary:hover { background: var(--lm-btn-primary-hover-bg); color: var(--lm-btn-primary-hover-fg); }
 
   .btn-secondary {
     background: var(--lm-surface);
-    border-color: var(--lm-border);
+    border-color: var(--lm-btn-secondary-border);
     color: var(--lm-fg);
   }
-  .btn-secondary:hover { background: var(--lm-surface-2); border-color: var(--lm-border-strong); }
+  .btn-secondary:hover { background: var(--lm-surface-2); border-color: var(--lm-btn-secondary-border); }
 
   .btn-ghost {
     background: transparent;
@@ -291,9 +291,9 @@
     width: 100%;
     min-height: var(--lm-control-h);
     padding: 0 var(--lm-control-px);
-    background: var(--lm-surface);
+    background: var(--lm-field-bg);
     border: 1px solid var(--lm-border);
-    border-radius: var(--lm-radius-sm);
+    border-radius: var(--lm-field-radius);
     color: var(--lm-fg);
     /* 16px on phones — anything smaller makes iOS Safari zoom on focus,
        which then strands the user mid-form. Non-negotiable. */

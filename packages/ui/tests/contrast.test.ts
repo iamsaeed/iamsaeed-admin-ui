@@ -104,10 +104,19 @@ describe.each(COMBOS)('$theme · $skin', ({ theme, skin }) => {
     expect(contrastRatio(c('--lm-on-accent'), c('--lm-accent'))).toBeGreaterThanOrEqual(AA_NORMAL)
   })
 
-  it('primary button text stays readable on accent-hover', () => {
-    expect(contrastRatio(c('--lm-on-accent'), c('--lm-accent-hover'))).toBeGreaterThanOrEqual(
+  it('primary button text stays readable on its hover colour', () => {
+    expect(contrastRatio(c('--lm-btn-primary-hover-fg'), c('--lm-btn-primary-hover-bg'))).toBeGreaterThanOrEqual(
       AA_NORMAL,
     )
+  })
+
+  it('text typed into a field is readable on the field background', () => {
+    expect(contrastRatio(c('--lm-fg'), c('--lm-field-bg'))).toBeGreaterThanOrEqual(AA_NORMAL)
+    expect(contrastRatio(c('--lm-muted'), c('--lm-field-bg'))).toBeGreaterThanOrEqual(AA_NORMAL)
+  })
+
+  it.skipIf(theme !== 'paper')('the secondary button outline is visible against the surface (paper outlines it in ink)', () => {
+    expect(contrastRatio(c('--lm-btn-secondary-border'), c('--lm-surface'))).toBeGreaterThanOrEqual(AA_NON_TEXT)
   })
 
   it('muted text on soft accent meets AA', () => {
