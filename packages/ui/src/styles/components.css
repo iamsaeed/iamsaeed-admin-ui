@@ -1446,6 +1446,79 @@
   .phone-option-dial { color: var(--lm-muted); font-variant-numeric: tabular-nums; }
   .phone-empty { padding: var(--lm-space-3); text-align: center; font-size: 0.8125rem; color: var(--lm-muted); }
 
+  /* ==========================================================================
+     SEARCH SELECT — a select you can search: a form-select button + teleported list
+     ========================================================================== */
+
+  .search-select { position: relative; display: inline-block; max-width: 100%; }
+  .search-select-trigger { display: inline-flex; align-items: center; width: auto; min-width: 8rem; text-align: left; cursor: pointer; }
+  .search-select-trigger.is-placeholder { color: var(--lm-muted); }
+  .search-select-trigger:disabled { cursor: not-allowed; }
+  .search-select-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .search-select-popover {
+    display: flex;
+    flex-direction: column;
+    z-index: var(--lm-z-dropdown);
+    background: var(--lm-surface);
+    border: 1px solid var(--lm-border);
+    border-radius: var(--lm-radius);
+    box-shadow: var(--lm-shadow-lg);
+    overflow: hidden;
+  }
+  .search-select-search {
+    display: flex;
+    align-items: center;
+    gap: var(--lm-space-2);
+    flex-shrink: 0;
+    padding: var(--lm-space-2) var(--lm-space-3);
+    border-bottom: 1px solid var(--lm-border);
+    color: var(--lm-subtle);
+  }
+  .search-select-input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--lm-fg); font-size: 1rem; }
+  .search-select-input:focus { outline: none; }
+  @media (min-width: 40rem) { .search-select-input { font-size: 0.8125rem; } }
+  .search-select-list { flex: 1; min-height: 0; margin: 0; padding: var(--lm-space-1) 0; list-style: none; overflow-y: auto; }
+  .search-select-option {
+    display: flex;
+    align-items: center;
+    gap: var(--lm-space-3);
+    min-height: 2.25rem;
+    padding: var(--lm-space-2) var(--lm-space-3);
+    font-size: 0.8125rem;
+    color: var(--lm-fg);
+    cursor: pointer;
+  }
+  .search-select-option.is-active { background: var(--lm-sunken); }
+  .search-select-option.is-selected { background: var(--lm-accent-soft); font-weight: 600; }
+  .search-select-option-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .search-select-empty { padding: var(--lm-space-3); text-align: center; font-size: 0.8125rem; color: var(--lm-muted); }
+
+  /* ==========================================================================
+     TYPEAHEAD — search-as-you-type field; its list reuses the .search-select-* popover
+     ========================================================================== */
+
+  .typeahead { position: relative; display: inline-block; max-width: 100%; width: 100%; }
+  .typeahead-field { position: relative; display: flex; align-items: center; }
+  .typeahead-input { padding-right: 2.25rem; }
+  .typeahead-busy, .typeahead-clear {
+    position: absolute;
+    right: var(--lm-space-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--lm-subtle);
+  }
+  .typeahead-busy svg { animation: typeahead-spin 0.9s linear infinite; }
+  .typeahead-clear { border: 0; border-radius: 999px; background: transparent; cursor: pointer; }
+  .typeahead-clear:hover { background: var(--lm-sunken); color: var(--lm-fg); }
+  .typeahead-clear:focus-visible { outline: 2px solid var(--lm-accent); outline-offset: 1px; }
+  .search-select-empty.is-error { color: var(--lm-danger); }
+  @keyframes typeahead-spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .typeahead-busy svg { animation: none; } }
+
   /* Keyboard escape hatch out of the nav — first focusable element in the shell. */
   .skip-link {
     position: absolute;

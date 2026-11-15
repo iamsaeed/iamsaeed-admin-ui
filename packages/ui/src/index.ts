@@ -94,6 +94,11 @@ export { default as DateRangePicker } from './components/ui/DateRangePicker.vue'
 export { default as Dialog } from './components/ui/Dialog.vue'
 export { default as Icon } from './components/ui/Icon.vue'
 export { default as KanbanBoard } from './components/ui/KanbanBoard.vue'
+export { default as SearchSelect } from './components/ui/SearchSelect.vue'
+export type { SearchSelectOption } from './components/ui/SearchSelect.vue'
+export { default as Typeahead } from './components/ui/Typeahead.vue'
+export { useLatestSearch } from './composables/useLatestSearch'
+export type { LatestSearch, LatestSearchOptions } from './composables/useLatestSearch'
 export type { KanbanColumn, KanbanMove } from './types/kanban'
 
 /* ── Style-guide primitives ─────────────────────────────────────────────── */
