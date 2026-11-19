@@ -11,7 +11,7 @@ import { useIsDesktop } from './useBreakpoint'
  *   mobile  (<lg)   an off-canvas DRAWER that is opened and closed
  *
  * `collapsed` and `drawerOpen` are therefore separate pieces of state, and
- * `collapsed` is the only one persisted — a drawer must never survive a
+ * `collapsed` and the open group are the only ones persisted — a drawer must never survive a
  * reload, or the user lands on a page with the nav covering the content.
  */
 
@@ -33,16 +33,20 @@ function init() {
 
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) state.collapsed = JSON.parse(raw)?.collapsed === true
+    if (raw) {
+      const saved = JSON.parse(raw)
+      state.collapsed = saved?.collapsed === true
+      state.openGroup = typeof saved?.openGroup === 'string' ? saved.openGroup : null
+    }
   } catch {
     /* ignore */
   }
 
   watch(
-    () => state.collapsed,
-    (v) => {
+    () => [state.collapsed, state.openGroup] as const,
+    ([collapsed, openGroup]) => {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ collapsed: v }))
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ collapsed, openGroup }))
       } catch {
         /* ignore */
       }

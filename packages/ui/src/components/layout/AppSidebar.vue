@@ -7,7 +7,7 @@
  * drift apart. `variant` only changes chrome (width behaviour, close button);
  * the nav tree itself is identical.
  */
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useSidebar } from '../../composables/useSidebar'
 import type { NavSchema } from '../../types/nav'
 import Icon from '../ui/Icon.vue'
@@ -32,12 +32,26 @@ const props = withDefaults(
 
 const emit = defineEmits<{ navigate: [id: string]; close: [] }>()
 
-const { collapsed, openGroup, toggleGroup } = useSidebar()
+const { collapsed, openGroup, toggleGroup, setOpenGroup } = useSidebar()
 
 /** Icons-only applies to the desktop rail; a drawer is never collapsed. */
 const isIconOnly = computed(() => props.variant === 'rail' && collapsed.value)
 
 const isActive = (id: string) => props.activeId === id
+
+/** The parent that holds the current page, so a page is never reached with its menu entry hidden. */
+const parentOf = (id: string | undefined) =>
+  props.nav.flatMap((s) => s.items).find((i) => i.children?.some((c) => c.id === id))?.id ?? null
+const holdsActive = (item: { children?: { id: string }[] }) => !!item.children?.some((c) => isActive(c.id))
+
+watch(
+  () => props.activeId,
+  (id) => {
+    const parent = parentOf(id)
+    if (parent) setOpenGroup(parent)
+  },
+  { immediate: true },
+)
 
 function onItemClick(id: string, hasChildren: boolean) {
   if (hasChildren) {
@@ -95,7 +109,7 @@ function onItemClick(id: string, hasChildren: boolean) {
             <button
               type="button"
               class="nav-item w-full"
-              :class="{ 'is-active': isActive(item.id), 'justify-center': isIconOnly }"
+              :class="{ 'is-active': isActive(item.id) || (item.children && openGroup !== item.id && holdsActive(item)), 'justify-center': isIconOnly }"
               :aria-expanded="item.children ? openGroup === item.id : undefined"
               :title="isIconOnly ? item.label : undefined"
               @click="onItemClick(item.id, !!item.children)"
@@ -103,7 +117,7 @@ function onItemClick(id: string, hasChildren: boolean) {
               <Icon v-if="item.icon" :name="item.icon" :size="18" />
               <template v-if="!isIconOnly">
                 <span class="flex-1 text-left truncate">{{ item.label }}</span>
-                <span v-if="item.badge" class="badge badge-neutral">{{ item.badge }}</span>
+                <span v-if="item.badge && !(item.children && openGroup === item.id)" class="badge badge-neutral">{{ item.badge }}</span>
                 <Icon
                   v-if="item.children"
                   name="chevron-down"
